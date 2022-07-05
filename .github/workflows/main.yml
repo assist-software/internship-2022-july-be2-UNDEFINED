@@ -1,0 +1,83 @@
+name: .NET
+
+env:
+  AZURE_WEBAPP_NAME: assist-jully-2022-be2
+  AZURE_WEBAPP_PACKAGE_PATH: 'source/Assist.Jully.2022.BE2'
+  AZURE_WEBAPP_PROJECT_FOLDER: 'source/Assist.Jully.2022.BE1/Assist.Jully.2022.BE2'
+  AZURE_WEBAPP_PROJECT: 'source/Assist.Jully.2022.BE1/Assist.Jully.2022.BE1/Assist.Jully.2022.BE2.csproj'
+  DOTNET_VERSION: '6'
+
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+    - 'README.md'
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+    - 'README.md'
+    
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+        
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+      
+    - name: Set up dependency caching for faster builds
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+          
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+      
+    - name: Build
+      run: dotnet build --no-restore
+      working-directory: ${{env.AZURE_WEBAPP_PROJECT_FOLDER}}
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      working-directory: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+      
+      
+    - name: Publish
+      run: dotnet publish ${{env.AZURE_WEBAPP_PROJECT}} -c Release -o source/release
+      
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v3
+      with:
+        name: .net-app
+        path: source/release
+        
+      
+  deploy:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Development'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.deployment_token }}
