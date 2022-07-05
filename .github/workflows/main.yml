@@ -3,8 +3,8 @@ name: .NET
 env:
   AZURE_WEBAPP_NAME: assist-jully-2022-be2
   AZURE_WEBAPP_PACKAGE_PATH: 'source/Assist.Jully.2022.BE2'
-  AZURE_WEBAPP_PROJECT_FOLDER: 'source/Assist.Jully.2022.BE1/Assist.Jully.2022.BE2'
-  AZURE_WEBAPP_PROJECT: 'source/Assist.Jully.2022.BE1/Assist.Jully.2022.BE1/Assist.Jully.2022.BE2.csproj'
+  AZURE_WEBAPP_PROJECT_FOLDER: 'source/Assist.Jully.2022.BE2/Assist.Jully.2022.BE2'
+  AZURE_WEBAPP_PROJECT: 'source/Assist.Jully.2022.BE2/Assist.Jully.2022.BE2/Assist.Jully.2022.BE2.csproj'
   DOTNET_VERSION: '6'
 
 on:
