@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
+var allowSpecificOrigins = "allowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddControllers();
 
@@ -37,6 +37,18 @@ builder.Services.AddSwaggerGen(c =>
     );
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: allowSpecificOrigins,
+                      policy =>
+                      {
+                          policy
+                          .WithOrigins("*")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                      });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -45,11 +57,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(allowSpecificOrigins);
+
+app.UseHttpsRedirection();
+
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseCors();
 
 app.Run();
