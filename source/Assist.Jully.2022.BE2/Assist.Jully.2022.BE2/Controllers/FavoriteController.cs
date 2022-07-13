@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
 namespace Assist.Jully._2022.BE2.Controllers
 {
-    [ApiController, Route("/api/favorite"), Produces("application/json")]
+    [ApiController, Route("/api/[controller]"), Produces("application/json")]
     public class FavoriteController : ControllerBase
     {
-
         [HttpPost("{id}")]
         public IActionResult SaveFavoriteItem()
         {
@@ -15,7 +13,6 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch (Exception)
             {
-
                 return BadRequest("An error has occured");
             }
         }
@@ -28,8 +25,7 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return new OkObjectResult("ok");
             }
             catch (Exception)
-            {
-
+            { 
                 return BadRequest("An error has occured");
             }
         }
