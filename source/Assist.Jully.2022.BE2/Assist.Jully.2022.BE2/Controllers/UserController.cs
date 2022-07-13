@@ -10,7 +10,7 @@ namespace Assist.Jully._2022.BE2.Controllers
     {
         
         [HttpPost("authenticate")]
-        public IActionResult Authenticate(useraccess access)
+        public IActionResult Authenticate(UserAccess Access)
         {
             try
             {

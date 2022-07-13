@@ -8,7 +8,7 @@ namespace Assist.July._2022.BE2.Domain
 {
     public class User
     {
-        public Guid id { get; set; }
+        public Guid Id { get; set; }
         public string Fullname { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
@@ -17,15 +17,15 @@ namespace Assist.July._2022.BE2.Domain
         public DateTime DateOfBirth { get; set; }
         public string Address { get; set; }
         public string Photo { get; set; }
-        public Guid Useractivities { get; set; }
+        public Guid UserActivities { get; set; }
         public string Token { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public bool Isactive { get; set; }
+        public bool IsActive { get; set; }
     }
-    public class useraccess
+    public class UserAccess
     {
-        public string mail { get; set; }
-        public string password { get; set; }
+        public string Mail { get; set; }
+        public string Password { get; set; }
     }
 }
