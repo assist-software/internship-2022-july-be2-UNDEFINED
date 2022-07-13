@@ -2,10 +2,10 @@
 {
     public record UserActivity
     {
-        public string? Device { get; set; } 
-        string? DeviceType { get; set; }
-        string? Location { get; set; }
-        DateTime ConnectionDate { get; set; }
+        public string? Device { get; set; }
+        public string? DeviceType { get; set; }
+        public string? Location { get; set; }
+        public DateTime ConnectionDate { get; set; }
         public bool Status { get; set; }
     }
 }
