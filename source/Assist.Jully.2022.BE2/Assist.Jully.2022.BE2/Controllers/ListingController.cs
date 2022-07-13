@@ -1,47 +1,73 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
     [ApiController, Route("api/[controller]"), Produces("application/json")]
     public class ListingController : Controller
     {
-        private IMapper mapper;
-
-        [HttpGet("message")]
-        public IActionResult GetMessage()
-        {
-            return new OkObjectResult("Listing Controller!");
-        }
 
         [HttpPost("Create")]
         public IActionResult CreateNewListing()
         {
-            return new OkObjectResult("Create new listing");
+            try
+            {
+                return new OkObjectResult("Create new listing");
+            }
+            catch(Exception)
+            {
+                return BadRequest("An error has occured");
+            }
         }
 
         [HttpGet]
         public IActionResult GetAllListings()
         {
-            return new OkObjectResult("Get all listings");
+            try
+            {
+                return new OkObjectResult("Get all listings");
+            }
+            catch (Exception)
+            {
+                return BadRequest("An error has occured");
+            }
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateAListing()
         {
-            return new OkObjectResult("Update a listing");
+            try
+            {
+                return new OkObjectResult("Update a listing");
+            }
+            catch (Exception)
+            {
+                return BadRequest("An error has occured");
+            }
         }
 
         [HttpGet("{id}")]
         public IActionResult GetAListing()
         {
-            return new OkObjectResult("Get a listing");
+            try
+            {
+                return new OkObjectResult("Get a listing");
+            }
+            catch (Exception)
+            {
+                return BadRequest("An error has occured");
+            }
         }
         [HttpDelete("{id}")]
         public IActionResult DeleteAListing()
         {
-            return new OkObjectResult("Delete a listing");
+            try
+            {
+                return new OkObjectResult("Delete a listing");
+            }
+            catch (Exception)
+            {
+                return BadRequest("An error has occured");
+            }
         }
     }
 }
