@@ -26,6 +26,6 @@ namespace Assist.July._2022.BE2.Domain
     public class useraccess
     {
         public string mail { get; set; }
-        public string passwor { get; set; }
+        public string password { get; set; }
     }
 }
