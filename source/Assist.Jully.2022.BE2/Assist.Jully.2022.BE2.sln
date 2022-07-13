@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assist.Jully.2022.BE2", "Assist.Jully.2022.BE2\Assist.Jully.2022.BE2.csproj", "{C4350C45-DD0D-4444-A1F4-89528230A7FB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assist.Juy.2022.BE2.Domain", "Assist.Juy.2022.BE2.Domain\Assist.Juy.2022.BE2.Domain.csproj", "{870125AD-3DF7-4FEE-8E63-5DDC21498F04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assist.Juy_2022.BE2.Domain", "Assist.Juy.2022.BE2.Domain\Assist.Juy_2022.BE2.Domain.csproj", "{870125AD-3DF7-4FEE-8E63-5DDC21498F04}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assist.Juy.2022.BE2.Infrastructure", "Assist.Juy.2022.BE2.Infrastructure\Assist.Juy.2022.BE2.Infrastructure.csproj", "{69847AAA-C0BC-4B04-8163-076D87542712}"
 EndProject

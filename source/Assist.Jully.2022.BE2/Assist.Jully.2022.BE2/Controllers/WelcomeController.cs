@@ -3,7 +3,7 @@
 namespace Assist.Jully._2022.BE2.Controllers
 {
     [ApiController, Route("api/[controller]"), Produces("application/json")]
-    public class WelcomeController : Controller
+    public class WelcomeController : ControllerBase
     {
         [HttpGet("message")]
         public IActionResult GetWelcomeMessage()
