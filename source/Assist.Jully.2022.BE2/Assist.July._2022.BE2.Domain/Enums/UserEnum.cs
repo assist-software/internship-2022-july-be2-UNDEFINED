@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 
 namespace Assist.July._2022.BE2.Domain
 {
-    public enum gender1 : byte
+    public enum Gender
     {
-        male = 0,
-        female = 1
+        Male,
+        Female
+        
     }
-    public enum role : byte
+    public enum Role
     {
-        admin = 0,
-        validator = 1,
-        user = 10
+        Admin,
+        Validator,
+        User
     }
 }

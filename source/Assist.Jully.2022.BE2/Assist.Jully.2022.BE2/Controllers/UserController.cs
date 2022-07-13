@@ -5,16 +5,12 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
+    [Route("api/[controller]"), ApiController, Authorize]
     public class usercontroller : ControllerBase
     {
-
-
-
+        
         [HttpPost("authenticate")]
-        public IActionResult Authenticate(string mail, string parola)
+        public IActionResult Authenticate(useraccess access)
         {
             try
             {
@@ -22,12 +18,9 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch
             {
-                return new BadRequestObjectResult("nope");
+                return new BadRequestObjectResult("An error has occured");
             }
-
-
         }
-
         [HttpPost("Register")]
         public IActionResult Register()
         {
@@ -37,11 +30,10 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch
             {
-                return new BadRequestObjectResult("nope");
+                return new BadRequestObjectResult("An error has occured");
             }
         }
-
-        [HttpPost("reset-password")]
+        [HttpPost("reset/password")]
         public IActionResult resetpassword()
         {
             try
@@ -50,10 +42,9 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch
             {
-                return new BadRequestObjectResult("nope");
+                return new BadRequestObjectResult("An error has occured");
             }
         }
-
         [HttpPut("{id}")]
         public IActionResult Update(int id)
         {
@@ -63,10 +54,9 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch
             {
-                return new BadRequestObjectResult("nope");
+                return new BadRequestObjectResult("An error has occured");
             }
         }
-
         [HttpGet("{id}")]
         public IActionResult Getuser(int id)
         {
@@ -76,7 +66,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch
             {
-                return new BadRequestObjectResult("nope");
+                return new BadRequestObjectResult("An error has occured");
             }
         }
         [HttpGet]
@@ -88,10 +78,9 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch
             {
-                return new BadRequestObjectResult("nope");
+                return new BadRequestObjectResult("An error has occured");
             }
         }
-
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -101,9 +90,8 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch
             {
-                return new BadRequestObjectResult("nope");
+                return new BadRequestObjectResult("An error has occured");
             }
         }
-
     }
 }
