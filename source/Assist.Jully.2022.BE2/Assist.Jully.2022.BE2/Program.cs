@@ -1,11 +1,12 @@
 using Microsoft.OpenApi.Models;
+using Assist.July._2022.BE2.Domain;
 
 var allowSpecificOrigins = "allowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "version 1", Version = "v1" });
