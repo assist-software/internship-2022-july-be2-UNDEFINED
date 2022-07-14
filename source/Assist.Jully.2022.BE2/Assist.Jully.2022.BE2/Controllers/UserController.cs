@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Assist.Jully._2022.BE2.Controllers
 {
     [Route("api/[controller]"), ApiController, Authorize]
-    public class usercontroller : ControllerBase
+    public class UserController : ControllerBase
     {
-        
         [HttpPost("authenticate")]
         public IActionResult Authenticate(UserAccess Access)
         {
@@ -33,7 +32,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
         }
         [HttpPost("reset/password")]
-        public IActionResult resetpassword()
+        public IActionResult ResetPassword()
         {
             try
             {
@@ -57,7 +56,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
         }
         [HttpGet("{id}")]
-        public IActionResult Getuser(int id)
+        public IActionResult GetUser(int id)
         {
             try
             {
