@@ -1,6 +1,6 @@
 ﻿namespace Assist.July._2022.BE2.Domain
 {
-    public class User
+    public record User
     {
         public Guid Id { get; set; }
         public string? Fullname { get; set; }
