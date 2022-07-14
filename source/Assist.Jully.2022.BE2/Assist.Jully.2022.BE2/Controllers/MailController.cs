@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Assist.July._2022.BE2.Domain;
 using Assist.July._2022.BE2.Infrastructure;
+
 [Route("api/[controller]"), ApiController]
 public class MailController : ControllerBase
 {
@@ -14,17 +10,17 @@ public class MailController : ControllerBase
     {
         this.mailService = mailService;
     }
+
     [HttpPost("send")]
     public async Task<IActionResult> SendMail([FromForm] MailRequest request)
     {
         try
         {
-            await mailService.SendEmailAsync(request);
-            return Ok();
+            return new OkObjectResult("Ok");
         }
         catch (Exception ex)
         {
-            throw;
+            return BadRequest(ex.Message);
         }
     }
 }
