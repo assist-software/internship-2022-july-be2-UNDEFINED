@@ -44,9 +44,7 @@ namespace Assist.July._2022.BE2.Infrastructure
             smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
-            smtp.Disconnect(true);
-            
-            
+            smtp.Disconnect(true);   
         }
     }
 }
