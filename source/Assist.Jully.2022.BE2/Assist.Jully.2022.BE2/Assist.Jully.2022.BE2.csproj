@@ -10,11 +10,13 @@
   <ItemGroup>
     <PackageReference Include="MailKit" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.6" />
+    <PackageReference Include="MimeKit" Version="3.3.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Assist.July._2022.BE2.Domain\Assist.July._2022.BE2.Domain.csproj" />
+    <ProjectReference Include="..\Assist.July._2022.BE2.Infrastructure\Assist.July._2022.BE2.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

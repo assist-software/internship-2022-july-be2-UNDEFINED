@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Assist.July._2022.BE2.Domain;
 using Assist.July._2022.BE2.Infrastructure;
-
-[Route("api/[controller]")]
-[ApiController]
+[Route("api/[controller]"), ApiController]
 public class MailController : ControllerBase
 {
     private readonly IMailService mailService;
@@ -28,6 +26,5 @@ public class MailController : ControllerBase
         {
             throw;
         }
-
     }
 }
