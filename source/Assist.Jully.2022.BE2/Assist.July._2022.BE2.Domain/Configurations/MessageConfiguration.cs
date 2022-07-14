@@ -31,6 +31,12 @@ namespace Assist.July._2022.BE2.Domain.Configurations
                 .Property(entity => entity.Content)
                 .IsRequired();
 
+
+            // ???
+            builder
+                .Property(entity => entity.ViewStatus)
+                .IsUnicode(false);
+
             
         }
     }
