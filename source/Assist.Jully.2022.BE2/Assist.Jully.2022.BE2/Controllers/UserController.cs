@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Assist.July._2022.BE2.Domain;
 using Microsoft.AspNetCore.Authorization;
+using Assist.July._2022.BE2.Domain.Entities;
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
