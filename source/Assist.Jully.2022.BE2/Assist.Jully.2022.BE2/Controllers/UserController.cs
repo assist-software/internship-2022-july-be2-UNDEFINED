@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Assist.Jully._2022.BE2.Controllers
 {
     [Route("api/[controller]"), ApiController, Authorize]
-    public class usercontroller : ControllerBase
+    
+    public class UserController : ControllerBase
     {
-        
         [HttpPost("authenticate")]
         public IActionResult Authenticate(UserAccess Access)
         {
@@ -20,6 +20,7 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return new BadRequestObjectResult("An error has occured");
             }
         }
+        
         [HttpPost("Register")]
         public IActionResult Register()
         {
@@ -32,8 +33,9 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return new BadRequestObjectResult("An error has occured");
             }
         }
+        
         [HttpPost("reset/password")]
-        public IActionResult resetpassword()
+        public IActionResult ResetPassword()
         {
             try
             {
@@ -44,6 +46,7 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return new BadRequestObjectResult("An error has occured");
             }
         }
+        
         [HttpPut("{id}")]
         public IActionResult Update(int id)
         {
@@ -56,8 +59,9 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return new BadRequestObjectResult("An error has occured");
             }
         }
+        
         [HttpGet("{id}")]
-        public IActionResult Getuser(int id)
+        public IActionResult GetUser(int id)
         {
             try
             {
@@ -68,6 +72,7 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return new BadRequestObjectResult("An error has occured");
             }
         }
+        
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -80,6 +85,7 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return new BadRequestObjectResult("An error has occured");
             }
         }
+        
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
