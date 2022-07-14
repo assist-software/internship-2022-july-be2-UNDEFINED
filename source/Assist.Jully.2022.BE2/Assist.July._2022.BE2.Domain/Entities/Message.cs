@@ -1,4 +1,6 @@
-﻿namespace Assist.July._2022.BE2.Domain.Entities
+﻿using System.ComponentModel;
+
+namespace Assist.July._2022.BE2.Domain.Entities
 {
     public record Message
     {
@@ -8,6 +10,6 @@
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string? Content { get; set; }
-        public bool ViewStatus { get; set; }
+        public bool? ViewStatus { get; set; }
     }
 }

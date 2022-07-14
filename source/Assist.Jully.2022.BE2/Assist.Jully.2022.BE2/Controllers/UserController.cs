@@ -1,6 +1,7 @@
-﻿using Assist.July._2022.BE2.Domain;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Assist.July._2022.BE2.Domain.Entities;
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
@@ -9,7 +10,7 @@ namespace Assist.Jully._2022.BE2.Controllers
     public class UserController : ControllerBase
     {
         [HttpPost("authenticate")]
-        public IActionResult Authenticate(UserAccess Access)
+        public IActionResult Authenticate(User Access)
         {
             try
             {
