@@ -54,8 +54,6 @@ namespace Assist.July._2022.BE2.Domain.Configurations
                 .HasOne(entity => entity.UserActivities)
                 .WithMany(entity => entity.Users);
 
-
-
             builder
                 .Property(entity => entity.CreatedAt)
                 .IsRequired();
@@ -63,7 +61,6 @@ namespace Assist.July._2022.BE2.Domain.Configurations
             builder
                 .Property(entity => entity.UpdatedAt)
                 .IsRequired();
-
         }
     }
 }

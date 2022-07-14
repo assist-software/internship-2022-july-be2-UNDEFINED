@@ -34,9 +34,9 @@ namespace Assist.July._2022.BE2.Domain.Configurations
                 .HasOne(entity => entity.Author)
                 .WithMany(entity => entity.Listings);
 
-            builder.
-                Property(entity => entity.ApprovedBy).
-                IsRequired();
+            builder
+                .Property(entity => entity.ApprovedBy)
+                .IsRequired();
 
             builder
                 .Property(entity => entity.Status)
@@ -55,8 +55,8 @@ namespace Assist.July._2022.BE2.Domain.Configurations
                 .IsRequired();
 
             builder
-               .Property(entity => entity.CreatedAt)
-               .IsRequired();
+                .Property(entity => entity.CreatedAt)
+                .IsRequired();
 
             builder
                 .Property(entity => entity.UpdatedAt)
