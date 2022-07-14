@@ -2,6 +2,7 @@
 {
     public record Favorite
     {
+        public Guid Id;
         public User? Users { get; set; }
         public Listing? Listings { get; set; }
     }

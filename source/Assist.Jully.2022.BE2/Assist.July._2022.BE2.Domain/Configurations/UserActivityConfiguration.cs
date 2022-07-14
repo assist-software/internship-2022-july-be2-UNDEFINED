@@ -10,7 +10,6 @@ namespace Assist.July._2022.BE2.Domain.Configurations
             builder
                 .HasKey(entity => entity.Id);
 
-
             builder
                 .Property(entity => entity.Device)
                 .IsRequired();

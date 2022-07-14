@@ -17,6 +17,7 @@
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public bool IsActive { get; set; }
+
         public ICollection<Listing>? Listings { get; set; }
         public ICollection<Favorite>? Favorites { get; set; }
     }

@@ -8,6 +8,9 @@ namespace Assist.July._2022.BE2.Domain.Configurations
     {
         public void Configure(EntityTypeBuilder<Favorite> builder)
         {
+            builder.
+                HasKey(entity => entity.Id);
+
             builder
                 .HasOne(entity => entity.Users)
                 .WithMany(entity => entity.Favorites);

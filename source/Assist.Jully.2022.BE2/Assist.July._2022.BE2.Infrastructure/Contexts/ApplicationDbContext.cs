@@ -6,7 +6,6 @@ namespace Assist.July._2022.BE2.Infrastructure.Contexts
 {
     public class ApplicationDbContext : DbContext
     {
-       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
@@ -19,12 +18,8 @@ namespace Assist.July._2022.BE2.Infrastructure.Contexts
                 .Entity<User>()
                 .HasIndex(entity => entity.Email)
                 .IsUnique();
-
-
-            
-
-
         }
+
         public DbSet<User>? Users { get; set; }
         public DbSet<Favorite>? Favorites { get; set; }
         public DbSet<Listing>? Listings { get; set; }

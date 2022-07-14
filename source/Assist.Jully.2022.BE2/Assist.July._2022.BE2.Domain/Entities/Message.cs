@@ -10,7 +10,6 @@ namespace Assist.July._2022.BE2.Domain.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string? Content { get; set; }
-       // [DefaultValue("false")]
         public bool? ViewStatus { get; set; }
     }
 }
