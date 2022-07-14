@@ -33,7 +33,7 @@ namespace Assist.July._2022.BE2.Domain.Configurations
 
             builder
                 .Property(entity => entity.ViewStatus)
-                .IsUnicode(false); 
+                .HasDefaultValue(false);
         }
     }
 }

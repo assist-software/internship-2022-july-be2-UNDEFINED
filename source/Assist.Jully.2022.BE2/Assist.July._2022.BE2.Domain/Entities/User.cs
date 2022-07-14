@@ -21,9 +21,4 @@
         public ICollection<Listing>? Listings { get; set; }
         public ICollection<Favorite>? Favorites { get; set; }
     }
-    public class UserAccess
-    {
-        public string? Mail { get; set; }
-        public string? Password { get; set; }
-    }
 }

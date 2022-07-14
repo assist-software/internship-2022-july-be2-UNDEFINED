@@ -8,7 +8,6 @@
         public string? ShortDescription { get; set; }
         public string? Location { get; set; }
         public double? Price { get; set; }
-        public User? Author { get; set; }
         public Guid ApprovedBy { get; set; }
         public byte Status { get; set; }
         public string? Images { get; set; }
@@ -17,6 +16,7 @@
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
+        public User? Author { get; set; }
         public ICollection<Favorite>? FavoredBy { get; set; }
     }
 }
