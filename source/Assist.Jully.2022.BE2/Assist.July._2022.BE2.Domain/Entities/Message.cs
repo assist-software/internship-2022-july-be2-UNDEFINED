@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-namespace Assist.July._2022.BE2.Domain.Entities
+﻿namespace Assist.July._2022.BE2.Domain.Entities
 {
-    internal class Message
+    public record Message
     {
         public Guid SenderId { get; set; }
         public Guid ReceiverId { get; set; }

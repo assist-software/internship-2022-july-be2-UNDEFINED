@@ -1,10 +1,9 @@
+using Assist.July._2022.BE2.Domain;
+using Assist.July._2022.BE2.Infrastructure;
 using Microsoft.OpenApi.Models;
-
 var allowSpecificOrigins = "allowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -35,7 +34,8 @@ builder.Services.AddSwaggerGen(c =>
     }
     );
 });
-
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddTransient<IMailService,MailService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowSpecificOrigins,
@@ -47,9 +47,7 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader();
                       });
 });
-
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
