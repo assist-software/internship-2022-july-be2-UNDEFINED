@@ -1,20 +1,14 @@
 using Assist.July._2022.BE2.Application.Interfaces;
 using Assist.July._2022.BE2.Application.Services;
 using Assist.July._2022.BE2.Domain.Entities;
-using Assist.July._2022.BE2.Infrastructure;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 var allowSpecificOrigins = "allowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
-
 var sqlConnectionBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("SqlDBConnectionString"));
-
-
-
 builder.Services.AddControllers();
-//builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -45,9 +39,7 @@ builder.Services.AddSwaggerGen(c =>
     }
     );
 });
-
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(sqlConnectionBuilder.ConnectionString));
-
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddTransient<IMailService,MailService>();
 builder.Services.AddCors(options =>
@@ -61,6 +53,7 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader();
                       });
 });
+
 var app = builder.Build();
 
 //if (app.Environment.IsDevelopment())

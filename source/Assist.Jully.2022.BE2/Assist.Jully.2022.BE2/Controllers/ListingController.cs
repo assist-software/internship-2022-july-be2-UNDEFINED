@@ -5,7 +5,6 @@ namespace Assist.Jully._2022.BE2.Controllers
     [ApiController, Route("api/[controller]"), Produces("application/json")]
     public class ListingController : Controller
     {
-
         [HttpPost("Create")]
         public IActionResult CreateNewListing()
         {
@@ -57,6 +56,7 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return BadRequest("An error has occured");
             }
         }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteAListing()
         {

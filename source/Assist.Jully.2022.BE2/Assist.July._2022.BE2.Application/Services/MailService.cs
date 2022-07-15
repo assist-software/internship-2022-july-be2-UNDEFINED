@@ -17,7 +17,6 @@ namespace Assist.July._2022.BE2.Application.Services
         }
         public async Task SendEmailAsync(MailRequest mailRequest)
         {
-
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
@@ -39,7 +38,6 @@ namespace Assist.July._2022.BE2.Application.Services
                     }
                 }
             }
-
             builder.HtmlBody = mailRequest.Body;
             email.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
