@@ -8,11 +8,13 @@ namespace Assist.July._2022.BE2.Infrastructure.Contexts
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Listing> Listings { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());

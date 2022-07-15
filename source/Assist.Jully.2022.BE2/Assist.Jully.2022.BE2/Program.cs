@@ -7,7 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 var allowSpecificOrigins = "allowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
-var sqlConnectionBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("SqlDBConnectionString"));
+var sqlConnectionBuilder = new SqlConnectionStringBuilder(
+    builder
+    .Configuration
+    .GetConnectionString("SqlDBConnectionString"));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -39,7 +42,8 @@ builder.Services.AddSwaggerGen(c =>
     }
     );
 });
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(sqlConnectionBuilder.ConnectionString));
+builder.Services.AddDbContext<ApplicationDbContext>(options => 
+    options.UseSqlServer(sqlConnectionBuilder.ConnectionString));
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddTransient<IMailService,MailService>();
 builder.Services.AddCors(options =>
