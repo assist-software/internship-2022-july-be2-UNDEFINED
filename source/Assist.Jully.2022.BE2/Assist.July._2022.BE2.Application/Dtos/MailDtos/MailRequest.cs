@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-namespace Assist.July._2022.BE2.Domain
+namespace Assist.July._2022.BE2.Application.Dtos.MailDtos
 {
     public class MailRequest
     {

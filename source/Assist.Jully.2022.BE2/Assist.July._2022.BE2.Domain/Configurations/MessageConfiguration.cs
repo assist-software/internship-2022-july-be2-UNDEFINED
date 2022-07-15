@@ -8,6 +8,8 @@ namespace Assist.July._2022.BE2.Domain.Configurations
         public void Configure(EntityTypeBuilder<Message> builder)
         {
             builder
+                .HasKey(entity => entity.Id);
+            builder
                 .Property(entity => entity.SenderId)
                 .IsRequired();
 

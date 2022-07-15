@@ -8,6 +8,7 @@
         public string? DeviceType { get; set; }
         public string? Location { get; set; }
         public DateTime ConnectionDate { get; set; }
+
         public bool Status { get; set; }
     }
 }

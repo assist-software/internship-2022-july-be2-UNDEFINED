@@ -1,10 +1,12 @@
-﻿using Assist.July._2022.BE2.Domain;
+﻿using Assist.July._2022.BE2.Application.Dtos.MailDtos;
+using Assist.July._2022.BE2.Application.Interfaces;
+using Assist.July._2022.BE2.Domain.Entities;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace Assist.July._2022.BE2.Infrastructure
+namespace Assist.July._2022.BE2.Application.Services
 {
     public class MailService : IMailService
     {
@@ -15,7 +17,7 @@ namespace Assist.July._2022.BE2.Infrastructure
         }
         public async Task SendEmailAsync(MailRequest mailRequest)
         {
-            
+
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
@@ -37,14 +39,14 @@ namespace Assist.July._2022.BE2.Infrastructure
                     }
                 }
             }
-            
+
             builder.HtmlBody = mailRequest.Body;
             email.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
             smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
-            smtp.Disconnect(true);   
+            smtp.Disconnect(true);
         }
     }
 }
