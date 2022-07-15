@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Assist.July._2022.BE2.Domain.Entities
+﻿namespace Assist.July._2022.BE2.Domain.Entities
 {
     public record Message
     {

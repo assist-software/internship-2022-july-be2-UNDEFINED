@@ -1,5 +1,6 @@
 using Assist.July._2022.BE2.Domain;
 using Assist.July._2022.BE2.Infrastructure;
+using Assist.July._2022.BE2.Infrastructure.Contexts;
 using Microsoft.OpenApi.Models;
 var allowSpecificOrigins = "allowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +37,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddTransient<IMailService,MailService>();
+builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowSpecificOrigins,
