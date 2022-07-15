@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Assist.July._2022.BE2.Domain;
-using Assist.July._2022.BE2.Infrastructure;
+using Assist.July._2022.BE2.Application.Interfaces;
+using Assist.July._2022.BE2.Application.Dtos.MailDtos;
 
 [Route("api/[controller]"), ApiController]
 public class MailController : ControllerBase

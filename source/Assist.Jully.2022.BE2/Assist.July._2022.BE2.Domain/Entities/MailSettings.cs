@@ -1,4 +1,4 @@
-﻿namespace Assist.July._2022.BE2.Domain
+﻿namespace Assist.July._2022.BE2.Domain.Entities
 {
     public class MailSettings
     {
