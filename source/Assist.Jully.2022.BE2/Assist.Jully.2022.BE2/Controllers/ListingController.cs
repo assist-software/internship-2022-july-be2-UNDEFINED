@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Assist.July._2022.BE2.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
