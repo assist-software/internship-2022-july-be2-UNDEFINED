@@ -5,10 +5,10 @@ using Assist.July._2022.BE2.Application.Dtos.MailDtos;
 [Route("api/[controller]"), ApiController]
 public class MailController : ControllerBase
 {
-    private readonly IMailService mailService;
+    private readonly IMailService MailService;
     public MailController(IMailService mailService)
     {
-        this.mailService = mailService;
+        MailService = mailService;
     }
 
     [HttpPost("send")]
@@ -16,11 +16,12 @@ public class MailController : ControllerBase
     {
         try
         {
+            await MailService.SendEmailAsync(request);
             return new OkObjectResult("Ok");
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return new BadRequestObjectResult("Error");
         }
     }
 }

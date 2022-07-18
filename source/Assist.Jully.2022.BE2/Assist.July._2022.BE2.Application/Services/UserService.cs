@@ -4,17 +4,20 @@ using Assist.July._2022.BE2.Application.Helper;
 using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
 using AutoMapper;
+using Assist.July._2022.BE2.Application.Dtos.MailDtos;
 
 namespace Assist.July._2022.BE2.Application.Services
 {
     public class UserService:IUserService
     {
+        IMailService MailService;
         ApplicationDbContext applicationDbContext;
         readonly IMapper Mapper;
-        public UserService(ApplicationDbContext DataBase,IMapper mapper)
+        public UserService(ApplicationDbContext DataBase,IMapper mapper, IMailService mailService)
         {
             applicationDbContext = DataBase;
             Mapper = mapper;
+            MailService = mailService;
         }
 
         public User Login(LoginRequest Login)
@@ -43,12 +46,17 @@ namespace Assist.July._2022.BE2.Application.Services
 
             return user;
         }
-        public void ResetPassword(string email)
+        public void ResetPassword(string Email)
         {
-            var user = applicationDbContext.Users.Find(email);
+            var user = applicationDbContext.Users.SingleOrDefault(x => x.Email == Email);
             if (user == null)
                 throw new AppException("Wrong Mail");
             user.Password = CreateNewPassword();
+            MailRequest MailToSend=new MailRequest();
+            MailToSend.ToEmail = Email;
+            MailToSend.Subject = "New Password";
+            MailToSend.Body = user.Password;
+            MailService.SendEmailAsync(MailToSend);
             applicationDbContext.Update(user);
             applicationDbContext.SaveChangesAsync();
         }
