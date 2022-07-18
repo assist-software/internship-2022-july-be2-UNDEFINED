@@ -10,9 +10,9 @@ namespace Assist.Jully._2022.BE2.Controllers
     {
         private IMessageService messageService;
 
-        public MessageController(IMessageService _messageService)
+        public MessageController(IMessageService messageService)
         {
-            messageService = _messageService;
+            this.messageService = messageService;
         }
 
         [HttpPost("new")]
@@ -21,6 +21,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             try
             {
                 await messageService.PostAsync(request);
+
                 return StatusCode(StatusCodes.Status201Created);
             }
             catch (Exception)
@@ -35,6 +36,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             try
             {
                 var allMessages = await messageService.GetAllAsync(listingId);
+
                 return new OkObjectResult(allMessages);
             }
             catch (Exception)
@@ -49,6 +51,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             try
             {
                 messageService.DeleteAllAsync(listingId);
+
                 return new OkObjectResult("All messages have been deleted!");
             }
             catch (Exception)
@@ -63,6 +66,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             try
             {
                 await messageService.DeleteAsync(messageId);
+
                 return new OkObjectResult("Message deleted!");
             }
             catch (Exception)

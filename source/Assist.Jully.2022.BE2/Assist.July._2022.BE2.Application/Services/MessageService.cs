@@ -12,10 +12,10 @@ namespace Assist.July._2022.BE2.Application.Services
         private readonly ApplicationDbContext applicationDbContext;
         private IMapper mapper;
 
-        public MessageService(ApplicationDbContext _applicationDbContext, IMapper _mapper)
+        public MessageService(ApplicationDbContext applicationDbContext, IMapper mapper)
         {
-            this.applicationDbContext = _applicationDbContext;
-            this.mapper = _mapper;
+            this.applicationDbContext = applicationDbContext;
+            this.mapper = mapper;
         }
 
         public async Task DeleteAllAsync(Guid listingId)
@@ -30,6 +30,7 @@ namespace Assist.July._2022.BE2.Application.Services
             {
                 applicationDbContext.Messages.Remove(dbMessage);
             }
+
             await applicationDbContext.SaveChangesAsync();
         }
 
@@ -44,8 +45,9 @@ namespace Assist.July._2022.BE2.Application.Services
             else
             {
                 applicationDbContext.Messages.Remove(dbMessage);
-                await applicationDbContext.SaveChangesAsync();
             }
+
+            await applicationDbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Message>> GetAllAsync(Guid listingId)
@@ -73,6 +75,7 @@ namespace Assist.July._2022.BE2.Application.Services
             newMessage.Id = Guid.NewGuid();
 
             applicationDbContext.Messages.Add(newMessage);
+
             await applicationDbContext.SaveChangesAsync();
         }
     }
