@@ -11,9 +11,9 @@ namespace Assist.July._2022.BE2.Application.Services
     {
         ApplicationDbContext applicationDbContext;
         readonly IMapper Mapper;
-        public UserService(ApplicationDbContext dataBase,IMapper mapper)
+        public UserService(ApplicationDbContext DataBase,IMapper mapper)
         {
-            applicationDbContext = dataBase;
+            applicationDbContext = DataBase;
             Mapper = mapper;
         }
 
@@ -32,7 +32,7 @@ namespace Assist.July._2022.BE2.Application.Services
             var user = Mapper.Map<User>(Register);
             user.IsActive = true;
             user.CreatedAt = DateTime.Now;
-            applicationDbContext.Users.Add(user);
+            applicationDbContext.Users.AddAsync(user);
             applicationDbContext.SaveChanges();
         }
         public User GetUser(Guid Id)
@@ -49,6 +49,8 @@ namespace Assist.July._2022.BE2.Application.Services
             if (user == null)
                 throw new AppException("Wrong Mail");
             user.Password = CreateNewPassword();
+            applicationDbContext.Update(user);
+            applicationDbContext.SaveChangesAsync();
         }
         public void UpdateUser(UpdateRequest Update,Guid id)
         {
@@ -57,7 +59,7 @@ namespace Assist.July._2022.BE2.Application.Services
                 user.Password = Update.Password;
             Mapper.Map(Update, user);
             applicationDbContext.Users.Update(user);
-            applicationDbContext.SaveChanges();
+            applicationDbContext.SaveChangesAsync();
         }
         public async Task<IEnumerable<User>>GetAll()
         { 
@@ -69,7 +71,7 @@ namespace Assist.July._2022.BE2.Application.Services
             if (user == null)
                 throw new AppException("User not found");
             applicationDbContext.Users.Remove(user);
-            applicationDbContext.SaveChanges();
+            applicationDbContext.SaveChangesAsync();
         }
         string CreateNewPassword()
         {

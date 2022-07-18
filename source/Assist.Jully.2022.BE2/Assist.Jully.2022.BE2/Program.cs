@@ -5,7 +5,6 @@ using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
 var allowSpecificOrigins = "allowSpecificOrigins";
