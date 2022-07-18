@@ -10,6 +10,16 @@ namespace Assist.July._2022.BE2.Application.Helper
         {
             CreateMap<Listing, PostListingRequestDto>();
             CreateMap<PostListingRequestDto, Listing>();
+            CreateMap<Listing, Listing>();
+            CreateMap<PostListingRequestDto, Listing>()
+                .ForAllMembers(entity => entity.Condition(
+                    (src, dest, prop) =>
+                    {
+                        if (prop == null) return false;
+                        if (prop.GetType() == typeof(string)
+                            && string.IsNullOrEmpty((string)prop)) return false;
+                        return true;
+                    }));
         }
     }
 }

@@ -3,6 +3,8 @@ using Assist.July._2022.BE2.Application.Interfaces;
 using Assist.July._2022.BE2.Application.Services;
 using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
+using Assist.July._2022.BE2.Infrastructure.Interfaces;
+using Assist.July._2022.BE2.Infrastructure.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -48,6 +50,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddTransient<IListingService, ListingService>();
+builder.Services.AddTransient<IListingRepository, ListingRepository>();
 builder.Services.AddCustomConfiguredAutoMapper();
 builder.Services.AddCors(options =>
 {
