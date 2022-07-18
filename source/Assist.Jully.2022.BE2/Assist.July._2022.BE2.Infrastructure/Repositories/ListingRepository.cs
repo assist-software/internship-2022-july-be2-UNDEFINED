@@ -37,7 +37,9 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
             var listing = await applicationDbContext.Listings.FindAsync(id);
 
             if (listing == null)
+            {
                 return null;
+            }
 
             return listing;
         }
