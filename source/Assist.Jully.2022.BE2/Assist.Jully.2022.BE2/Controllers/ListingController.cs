@@ -24,6 +24,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             try
             {
                 await listingService.AddAsync(request);
+
                 return Ok("Listing Added");
             }
             catch(Exception)
@@ -37,7 +38,7 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                var response =await listingService.GetAllListingsAsync();
+                var response = await listingService.GetAllListingsAsync();
 
                 if (response == null)
                 {
@@ -79,7 +80,7 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                var response =await listingService.GetListingByIdAsync(id);
+                var response = await listingService.GetListingByIdAsync(id);
 
                 if (response == null)
                 { 
@@ -99,7 +100,7 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                var response =await listingService.DeleteListingAsync(id);
+                var response = await listingService.DeleteListingAsync(id);
 
                 if (response == null)
                 { 

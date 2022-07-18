@@ -11,10 +11,6 @@ namespace Assist.July._2022.BE2.Domain.Configurations
                 .HasKey(entity => entity.Id);
 
             builder
-                .Property(entity => entity.Id)
-                .HasDefaultValueSql("NEWID()");
-
-            builder
                 .Property(entity => entity.Title)
                 .IsRequired();
 
@@ -39,8 +35,8 @@ namespace Assist.July._2022.BE2.Domain.Configurations
                 .WithMany(entity => entity.Listings);
 
             builder
-                .Property(entity => entity.ApprovedBy);
-                //.IsRequired();
+                .Property(entity => entity.ApprovedBy)
+                .IsRequired();
 
             builder
                 .Property(entity => entity.Status)

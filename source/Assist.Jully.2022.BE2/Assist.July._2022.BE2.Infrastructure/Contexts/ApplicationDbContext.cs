@@ -22,8 +22,6 @@ namespace Assist.July._2022.BE2.Infrastructure.Contexts
             modelBuilder.ApplyConfiguration(new ListingConfiguration());
             modelBuilder.ApplyConfiguration(new MessageConfiguration());
             modelBuilder.ApplyConfiguration(new UserActivityConfiguration());
-
-            modelBuilder.Entity<Listing>().Property(p => p.Id).HasDefaultValueSql("NEWID()");
         }
 
     }

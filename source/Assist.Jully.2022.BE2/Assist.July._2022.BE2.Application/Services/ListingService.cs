@@ -9,20 +9,17 @@ namespace Assist.July._2022.BE2.Application.Services
 {
     public class ListingService : IListingService
     {
-        private readonly ApplicationDbContext applicationDbContext;
         private IListingRepository listingRepo;
         private IMapper mapper;
 
         public ListingService(ApplicationDbContext applicationDbContext, IMapper mapper, IListingRepository listingRepo)
         {
-            this.applicationDbContext = applicationDbContext;
             this.mapper = mapper;
             this.listingRepo = listingRepo;
         }
         public async Task AddAsync(PostListingRequestDto request)
         {
             Listing newListing = mapper.Map<Listing>(request);
-            newListing.Id = Guid.NewGuid();
             await listingRepo.AddAsync(newListing);
         }
         public async Task<IEnumerable<Listing>> GetAllListingsAsync()
@@ -48,11 +45,13 @@ namespace Assist.July._2022.BE2.Application.Services
             mapper.Map(request, dbListing);
             dbListing.UpdatedAt = DateTime.Now;
             await listingRepo.PutAsync(dbListing);
+
             return dbListing;
         }
         public async Task<Listing> GetListingByIdAsync(Guid id)
         {
             var dbListing = await listingRepo.GetByIdAsync(id);
+
             if (dbListing == null)
             {
                 return null;
@@ -62,7 +61,7 @@ namespace Assist.July._2022.BE2.Application.Services
         }
         public async Task<Listing> DeleteListingAsync(Guid id)
         {
-            var dbListing =await listingRepo.GetByIdAsync(id);
+            var dbListing = await listingRepo.GetByIdAsync(id);
 
             if (dbListing == null)
             { 

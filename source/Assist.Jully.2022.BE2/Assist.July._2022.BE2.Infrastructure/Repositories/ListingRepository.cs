@@ -23,6 +23,7 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
         public async Task AddAsync(Listing listing)
         {
             applicationDbContext.Listings.Add(listing);
+
             await applicationDbContext.SaveChangesAsync();
         }
 
@@ -34,6 +35,7 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
         public async Task<Listing> GetByIdAsync(Guid id)
         {
             var listing = await applicationDbContext.Listings.FindAsync(id);
+
             if (listing == null)
                 return null;
 
@@ -42,6 +44,7 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
         public async Task DeleteAsync(Listing listing)
         {
             applicationDbContext.Listings.Remove(listing);
+
             await applicationDbContext.SaveChangesAsync();        
         }
 
