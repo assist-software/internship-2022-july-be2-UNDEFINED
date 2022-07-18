@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Assist.July._2022.BE2.Application.Dtos.MessageDtos;
 using Assist.July._2022.BE2.Application.Interfaces;
-using Assist.July._2022.BE2.Domain.Entities;
-using Assist.July._2022.BE2.Application.Dtos.MessageDtos;
 
 
 namespace Assist.Jully._2022.BE2.Controllers
@@ -23,7 +21,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             try
             {
                 await messageService.PostAsync(request);
-                return new OkObjectResult("Message sent!");
+                return StatusCode(StatusCodes.Status201Created);
             }
             catch (Exception)
             {
@@ -41,9 +39,10 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("An error has occured");
+                return StatusCode(StatusCodes.Status404NotFound);
             }
         }
+
         [HttpDelete("deleteAll/{listingId}")]
         public IActionResult DeleteAllMessages(Guid listingId)
         {
@@ -54,9 +53,10 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("An error has occured");
+                return StatusCode(StatusCodes.Status404NotFound);
             }
         }
+
         [HttpDelete("{messageId}")]
         public async Task<IActionResult> DeleteMessage(Guid messageId)
         {
@@ -67,7 +67,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("An error has occured");
+                return StatusCode(StatusCodes.Status404NotFound);
             }
         }
     }
