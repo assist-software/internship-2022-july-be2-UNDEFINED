@@ -8,8 +8,10 @@ namespace Assist.July._2022.BE2.Application.Mapper
     {
         public MessageProfile()
         {
+            CreateMap<PostMessageDto, Message>();
+            CreateMap<Message, PostMessageDto>();
             CreateMap<MessageDto, Message>();
-            CreateMap<Message, MessageDto> ();
+            CreateMap<Message, MessageDto>();
         }
     }
 }

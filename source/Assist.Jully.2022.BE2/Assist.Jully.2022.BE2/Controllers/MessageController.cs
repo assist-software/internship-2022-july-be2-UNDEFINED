@@ -17,26 +17,12 @@ namespace Assist.Jully._2022.BE2.Controllers
             messageService = _messageService;
         }
 
-        [HttpPost("{listingId}/{userId}")]
-        public IActionResult SendingNewMessage(Guid listingId, Guid userId)
+        [HttpPost("test")]
+        public async Task <IActionResult> SendingNewMessage(PostMessageDto request)
         {
             try
             {
-                messageService.PostAsynk(listingId, userId);
-                return new OkObjectResult("Sending new message listing: "+ listingId + "user: " + userId);
-            }
-            catch (Exception)
-            {
-                return BadRequest("An error has occured");
-            }
-        }
-
-        [HttpPost("{test}")]
-        public async Task <IActionResult> SendNewMessage(PostMessageDto request)
-        {
-            try
-            {
-                messageService.AddAsync(request);
+                await messageService.PostAsync(request);
                 return new OkObjectResult("Async method done!");
             }
             catch (Exception)
@@ -46,11 +32,12 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
 
         [HttpGet("{listingId}")]
-        public IActionResult GetAllMessages(Guid listingId)
+        public async Task<IActionResult> GetAllMessages(Guid listingId)
         {
             try
             {
-                return new OkObjectResult("Get all messages for listingId: "+listingId);
+                var allMessages = await messageService.GetAllAsync(listingId);
+                return new OkObjectResult("Get all messages for listingId: "+listingId+"----"+allMessages);
             }
             catch (Exception)
             {
@@ -62,7 +49,21 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
+                messageService.DeleteAllAsync(listingId);
                 return new OkObjectResult("Delete all messages: "+listingId);
+            }
+            catch (Exception)
+            {
+                return BadRequest("An error has occured");
+            }
+        }
+        [HttpDelete("{messageId}")]
+        public async Task<IActionResult> DeleteMessage(Guid messageId)
+        {
+            try
+            {
+                await messageService.DeleteAsync(messageId);
+                return new OkObjectResult("Delete one message, messageId: "+messageId);
             }
             catch (Exception)
             {

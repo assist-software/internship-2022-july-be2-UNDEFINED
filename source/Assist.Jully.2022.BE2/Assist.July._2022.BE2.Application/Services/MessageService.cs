@@ -16,17 +16,17 @@ namespace Assist.July._2022.BE2.Application.Services
             this.mapper = _mapper;
         }
 
-        public void DeleteAllAsync(Guid listingId)
+        public async Task DeleteAllAsync(Guid listingId)
         {
             var dbMessages = applicationDbContext.Messages.Where(x => x.ListingId == listingId).ToList();
             foreach(var dbMessage in dbMessages)
             {
                 applicationDbContext.Messages.Remove(dbMessage);
             }
-            applicationDbContext.SaveChanges();
+            await applicationDbContext.SaveChangesAsync();
         }
 
-        public void DeleteAsync(Guid messageId)
+        public async Task DeleteAsync(Guid messageId)
         {
             var dbMessage = applicationDbContext.Messages.Find(messageId);
             if (dbMessage == null)
@@ -36,11 +36,11 @@ namespace Assist.July._2022.BE2.Application.Services
             else
             {
                 applicationDbContext.Messages.Remove(dbMessage);
-                applicationDbContext.SaveChanges();
+                await applicationDbContext.SaveChangesAsync();
             }
         }
 
-        public IEnumerable<MessageDto> GetAllAsync(Guid listingId)
+        public async Task<IEnumerable<MessageDto>> GetAllAsync(Guid listingId)
         {
             var dbMessages = applicationDbContext.Messages.Where(x => x.ListingId == listingId).ToList<Message>();
             
@@ -54,12 +54,7 @@ namespace Assist.July._2022.BE2.Application.Services
             }
         }
 
-        public void PostAsync(Guid listingId, Guid userId)
-        {
-
-        }
-
-        public async Task AddAsync(PostMessageDto request)
+        public async Task PostAsync(PostMessageDto request)
         {
             Message newMessage = mapper.Map<Message>(request);
             newMessage.Id = Guid.NewGuid();
@@ -67,6 +62,5 @@ namespace Assist.July._2022.BE2.Application.Services
             applicationDbContext.Messages.Add(newMessage);
             await applicationDbContext.SaveChangesAsync();
         }
-        
     }
 }
