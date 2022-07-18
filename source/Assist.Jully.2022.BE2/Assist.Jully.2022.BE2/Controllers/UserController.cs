@@ -1,31 +1,36 @@
 ﻿using Assist.July._2022.BE2.Application.Dtos.UserDtos;
 using Assist.July._2022.BE2.Application.Helper;
 using Assist.July._2022.BE2.Application.Interfaces;
+using Assist.July._2022.BE2.Application.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
-    [Route("api/[controller]"), ApiController]
+    [Route("api/[controller]"), ApiController,AuthorizeAtribute]
     
     public class UserController : ControllerBase
     {
         private IUserService UserService;
         private IMapper Mapper;
-        public UserController(IUserService userService, IMapper mapper)
+        private readonly AppSettings AppSetting;
+        public UserController(IUserService userService, IMapper mapper,
+            IOptions<AppSettings>appsettings)
         {
             UserService = userService;
             Mapper = mapper;
+            AppSetting = appsettings.Value;
         }
 
-        [HttpPost("authenticate")]
+        [HttpPost("authenticate"),AllowAnonymus]
         public IActionResult Authenticate(LoginRequest Login)
         {
             try
             {
                 var user=UserService.Login(Login);
 
-                return new OkObjectResult("ok");
+                return new OkObjectResult(user);
             }
             catch(AppException ex)
             {
@@ -33,7 +38,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
         }
         
-        [HttpPost("Register")]
+        [HttpPost("Register"),AllowAnonymus]
         public IActionResult Register(RegisterRequest Register)
         {
             try

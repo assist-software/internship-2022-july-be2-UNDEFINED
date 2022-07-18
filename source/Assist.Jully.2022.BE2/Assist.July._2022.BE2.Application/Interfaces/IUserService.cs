@@ -10,7 +10,7 @@ namespace Assist.July._2022.BE2.Application.Interfaces
         public User GetUser(Guid Id);
         public void ResetPassword(string email);
         public void UpdateUser(UpdateRequest Update,Guid id);
-        public Task<IEnumerable<User>> GetAll();
+        public IEnumerable<User> GetAll();
         public void DeleteUser(Guid Id);
     }
 }

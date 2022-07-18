@@ -13,11 +13,14 @@ namespace Assist.July._2022.BE2.Application.Services
         IMailService MailService;
         ApplicationDbContext applicationDbContext;
         readonly IMapper Mapper;
-        public UserService(ApplicationDbContext DataBase,IMapper mapper, IMailService mailService)
+        private IJwtUtils JwtUtil;
+        public UserService(ApplicationDbContext DataBase,IMapper mapper, IMailService mailService
+            , IJwtUtils jwtUtil)
         {
             applicationDbContext = DataBase;
             Mapper = mapper;
             MailService = mailService;
+            JwtUtil = jwtUtil;
         }
 
         public User Login(LoginRequest Login)
@@ -25,16 +28,22 @@ namespace Assist.July._2022.BE2.Application.Services
             var user = applicationDbContext.Users.SingleOrDefault(x => x.Email == Login.Email);
             if (user == null || user.Password != Login.Password)
                 throw new AppException("Username or password is incorrect");
-
+            user.Token = JwtUtil.GenerateToken(user);
+            applicationDbContext.Update(user);
+            applicationDbContext.SaveChanges();
             return user;
         }
         public void Register(RegisterRequest Register)
         {
             if (applicationDbContext.Users.Any(x => x.Email == Register.Email))
                 throw new AppException("Email " + Register.Email + " is already taken");
+            
             var user = Mapper.Map<User>(Register);
             user.IsActive = true;
             user.CreatedAt = DateTime.Now;
+            user.UpdatedAt = DateTime.Now;
+            if (user.Password == String.Empty)
+                throw new AppException("Password Required");
             applicationDbContext.Users.AddAsync(user);
             applicationDbContext.SaveChanges();
         }
@@ -52,6 +61,7 @@ namespace Assist.July._2022.BE2.Application.Services
             if (user == null)
                 throw new AppException("Wrong Mail");
             user.Password = CreateNewPassword();
+            user.UpdatedAt = DateTime.Now;
             MailRequest MailToSend=new MailRequest();
             MailToSend.ToEmail = Email;
             MailToSend.Subject = "New Password";
@@ -63,14 +73,15 @@ namespace Assist.July._2022.BE2.Application.Services
         public void UpdateUser(UpdateRequest Update,Guid id)
         {
             var user = GetUser(id);
-            if (!string.IsNullOrEmpty(Update.Password))
+            if (!(string.IsNullOrEmpty(Update.Password))&&Update.Password.Length>=8)
                 user.Password = Update.Password;
             Mapper.Map(Update, user);
+            user.UpdatedAt = DateTime.Now;
             applicationDbContext.Users.Update(user);
             applicationDbContext.SaveChangesAsync();
         }
-        public async Task<IEnumerable<User>>GetAll()
-        { 
+        public IEnumerable<User>GetAll()
+        {
             return applicationDbContext.Users;
         }
         public void DeleteUser(Guid Id)

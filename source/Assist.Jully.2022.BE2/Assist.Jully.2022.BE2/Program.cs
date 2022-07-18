@@ -47,9 +47,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlServer(sqlConnectionBuilder.ConnectionString));
+
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddTransient<IMailService,MailService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddCustomConfiguredAutoMapper();
 builder.Services.AddCors(options =>
 {
@@ -77,6 +80,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 
