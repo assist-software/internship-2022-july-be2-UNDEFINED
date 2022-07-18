@@ -11,6 +11,10 @@ namespace Assist.July._2022.BE2.Domain.Configurations
                 .HasKey(entity => entity.Id);
 
             builder
+                .Property(entity => entity.Id)
+                .HasDefaultValueSql("NEWID()");
+
+            builder
                 .Property(entity => entity.Title)
                 .IsRequired();
 

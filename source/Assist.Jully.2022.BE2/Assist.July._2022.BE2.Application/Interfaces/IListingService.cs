@@ -6,10 +6,10 @@ namespace Assist.July._2022.BE2.Application.Interfaces
     public interface IListingService
     {
         // conventie de nume : AddAsync , GetByIdAsync , DeleteAsync.
-        void PostNewListing(PostListingRequestDto entity); // create listing
+        void AddAsync(PostListingRequestDto request); // create listing
         ICollection<Listing> GetAllListings(); // return all listings
         void GetListingById(int id);  // return listing by id
-        void PutListing(ListingDto entity); // update listing
+        void PutListing(ListingDto request); // update listing
         void DeleteListing(); // delete listing
         
     }

@@ -47,7 +47,8 @@ namespace Assist.July._2022.BE2.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("ApprovedBy")
                         .HasColumnType("uniqueidentifier");

@@ -1,4 +1,7 @@
-﻿using Assist.July._2022.BE2.Domain.Entities;
+﻿using Assist.July._2022.BE2.Application.Dtos.ListingDtos;
+using Assist.July._2022.BE2.Application.Interfaces;
+using Assist.July._2022.BE2.Domain.Entities;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Assist.Jully._2022.BE2.Controllers
@@ -6,12 +9,22 @@ namespace Assist.Jully._2022.BE2.Controllers
     [ApiController, Route("api/[controller]"), Produces("application/json")]
     public class ListingController : Controller
     {
+        private IListingService listingService;
+        //private readonly IMapper mapper;
+
+        public ListingController(IListingService listingService, IMapper mapper)
+        {
+            //this.mapper = mapper;
+            this.listingService = listingService;
+        }
+
         [HttpPost("create")]
-        public IActionResult CreateNewListing()
+        public IActionResult CreateNewListing(PostListingRequestDto request)
         {
             try
             {
-                return new OkObjectResult("Create new listing");
+                listingService.AddAsync(request);
+                return new OkObjectResult("Created new listing");
             }
             catch(Exception)
             {
@@ -24,7 +37,7 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                return new OkObjectResult("Get all listings");
+                return new OkObjectResult(listingService.GetAllListings());
             }
             catch (Exception)
             {
