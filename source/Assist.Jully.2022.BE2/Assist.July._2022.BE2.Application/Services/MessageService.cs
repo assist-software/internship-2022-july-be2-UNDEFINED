@@ -3,6 +3,7 @@ using Assist.July._2022.BE2.Application.Interfaces;
 using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace Assist.July._2022.BE2.Application.Services
 {
@@ -19,6 +20,11 @@ namespace Assist.July._2022.BE2.Application.Services
         public async Task DeleteAllAsync(Guid listingId)
         {
             var dbMessages = applicationDbContext.Messages.Where(x => x.ListingId == listingId).ToList();
+
+            if(!dbMessages.Any())
+            {
+                throw new KeyNotFoundException("Not found");
+            }
             foreach(var dbMessage in dbMessages)
             {
                 applicationDbContext.Messages.Remove(dbMessage);
@@ -29,6 +35,7 @@ namespace Assist.July._2022.BE2.Application.Services
         public async Task DeleteAsync(Guid messageId)
         {
             var dbMessage = applicationDbContext.Messages.Find(messageId);
+
             if (dbMessage == null)
             {
                 throw new KeyNotFoundException("Not found");
@@ -40,17 +47,17 @@ namespace Assist.July._2022.BE2.Application.Services
             }
         }
 
-        public async Task<IEnumerable<MessageDto>> GetAllAsync(Guid listingId)
+        public async Task<IEnumerable<Message>> GetAllAsync(Guid listingId)
         {
-            var dbMessages = applicationDbContext.Messages.Where(x => x.ListingId == listingId).ToList<Message>();
-            
-            if (dbMessages == null)
+            var dbMessages = await applicationDbContext.Messages.Where(x => x.ListingId == listingId).ToListAsync();
+        
+            if (!dbMessages.Any())
             {
-                return null;
+                throw new KeyNotFoundException("Not found");
             }
             else
             {
-                return (IEnumerable<MessageDto>)dbMessages;
+                return dbMessages;
             }
         }
 

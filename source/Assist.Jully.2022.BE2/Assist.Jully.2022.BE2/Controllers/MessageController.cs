@@ -17,13 +17,13 @@ namespace Assist.Jully._2022.BE2.Controllers
             messageService = _messageService;
         }
 
-        [HttpPost("test")]
+        [HttpPost("new")]
         public async Task <IActionResult> SendingNewMessage(PostMessageDto request)
         {
             try
             {
                 await messageService.PostAsync(request);
-                return new OkObjectResult("Async method done!");
+                return new OkObjectResult("Message sent!");
             }
             catch (Exception)
             {
@@ -37,20 +37,20 @@ namespace Assist.Jully._2022.BE2.Controllers
             try
             {
                 var allMessages = await messageService.GetAllAsync(listingId);
-                return new OkObjectResult("Get all messages for listingId: "+listingId+"----"+allMessages);
+                return new OkObjectResult(allMessages);
             }
             catch (Exception)
             {
                 return BadRequest("An error has occured");
             }
         }
-        [HttpDelete("{listingId}")]
+        [HttpDelete("deleteAll/{listingId}")]
         public IActionResult DeleteAllMessages(Guid listingId)
         {
             try
             {
                 messageService.DeleteAllAsync(listingId);
-                return new OkObjectResult("Delete all messages: "+listingId);
+                return new OkObjectResult("All messages have been deleted!");
             }
             catch (Exception)
             {
@@ -63,7 +63,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             try
             {
                 await messageService.DeleteAsync(messageId);
-                return new OkObjectResult("Delete one message, messageId: "+messageId);
+                return new OkObjectResult("Message deleted!");
             }
             catch (Exception)
             {
