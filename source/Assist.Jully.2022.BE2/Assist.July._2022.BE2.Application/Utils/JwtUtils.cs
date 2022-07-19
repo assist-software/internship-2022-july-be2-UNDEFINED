@@ -1,4 +1,5 @@
-﻿using Assist.July._2022.BE2.Application.Helper;
+﻿using Assist.July._2022.BE2.Application.Dtos.UserDtos;
+using Assist.July._2022.BE2.Application.Helper;
 using Assist.July._2022.BE2.Application.Interfaces;
 using Assist.July._2022.BE2.Domain.Entities;
 using Microsoft.Extensions.Options;
@@ -24,7 +25,9 @@ namespace Assist.July._2022.BE2.Application.Utils
             var key = Encoding.ASCII.GetBytes(AppSetting.SecretCode);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString().ToUpper()) }),
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString().ToUpper()),
+                    new Claim("Email", user.Email), new Claim("Role", user.Role.ToString())
+                }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)
@@ -32,7 +35,7 @@ namespace Assist.July._2022.BE2.Application.Utils
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-        public Guid? ValidateToken(string Token)
+        public UserToken? ValidateToken(string Token)
         {
             if (Token == null)
                 return null;
@@ -48,8 +51,11 @@ namespace Assist.July._2022.BE2.Application.Utils
             }, out SecurityToken ValidatedToken
                 );
             var JwtToken = (JwtSecurityToken)ValidatedToken;
-            var UserId = Guid.Parse(JwtToken.Claims.First(x => x.Type == "id").Value);
-            return UserId;
+            var userToken = new UserToken();
+            userToken.id= Guid.Parse(JwtToken.Claims.First(x => x.Type == "id").Value);
+            userToken.Email = JwtToken.Claims.First(x => x.Type == "Email").Value;
+            userToken.Role = byte.Parse(JwtToken.Claims.First(x => x.Type == "Role").Value);
+            return userToken;
         }
     }
 }
