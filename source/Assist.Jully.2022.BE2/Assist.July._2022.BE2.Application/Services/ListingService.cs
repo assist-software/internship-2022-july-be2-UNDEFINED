@@ -33,6 +33,17 @@ namespace Assist.July._2022.BE2.Application.Services
 
             return listings;
         }
+        public async Task<IEnumerable<Listing>> GetSortedListingsAsync(int pageNumber, int pageSize)
+        {
+            var listings = await listingRepo.GetSortedAsync(pageNumber, pageSize);
+
+            if (!listings.Any())
+            {
+                throw new KeyNotFoundException("No Listings found");
+            }
+
+            return listings;
+        }
         public async Task<Listing> PutListingAsync(PostListingRequestDto request, Guid id)
         {
             var dbListing = await listingRepo.GetByIdAsync(id);

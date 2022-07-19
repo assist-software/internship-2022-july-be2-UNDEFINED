@@ -52,6 +52,27 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return BadRequest("An error has occured");
             }
         }
+        [HttpGet("sort/{sortOrder}, {currentFilter}, {searchString}, {page}")]
+        public async Task<ActionResult<List<Listing>>> GetSortedListingsAsync(string sortOrder, string locationFilter, string priceRange, string searchString, string page)
+        {
+            try
+            {
+                int pageSize = 2;
+                int pageNumber = Int32.Parse(page ?? "1");
+                var response = await listingService.GetSortedListingsAsync(pageNumber, pageSize);
+
+                if (response == null)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return BadRequest("An error has occured");
+            }
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateListing([FromBody]PostListingRequestDto request, Guid id)
