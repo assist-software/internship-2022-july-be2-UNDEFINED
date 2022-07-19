@@ -17,6 +17,7 @@ public class MailController : ControllerBase
         try
         {
             await MailService.SendEmailAsync(request);
+            
             return new OkObjectResult("Ok");
         }
         catch (Exception ex)

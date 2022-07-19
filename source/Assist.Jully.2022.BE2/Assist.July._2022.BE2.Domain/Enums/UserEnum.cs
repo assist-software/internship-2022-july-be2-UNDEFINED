@@ -7,8 +7,8 @@
     }
     public enum Role
     {
+        User,
         Admin,
-        Validator,
-        User
+        Validator
     }
 }

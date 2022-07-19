@@ -30,6 +30,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             try
             {
                 var user=await UserService.Login(Login);
+                
                 return new OkObjectResult(user);
             }
             catch(AppException ex)

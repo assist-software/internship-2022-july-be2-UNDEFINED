@@ -85,6 +85,8 @@ namespace Assist.July._2022.BE2.Application.Services
         public async Task UpdateUser(UpdateRequest Update,Guid id)
         {
             var user = await UserRepository.GetByIdAsync(id);
+            if (user == null)
+                throw new AppException("User not found");
             Mapper.Map(Update, user);
             await UserRepository.PutAsync(user);
         }
