@@ -33,9 +33,12 @@ namespace Assist.July._2022.BE2.Application.Services
 
             return listings;
         }
-        public async Task<IEnumerable<Listing>> GetSortedListingsAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<Listing>> GetSortedListingsAsync(string? sortOrder, string? locationFilter, string? priceRange, string? searchString, string? page, string? pageSize)
         {
-            var listings = await listingRepo.GetSortedAsync(pageNumber, pageSize);
+            int itemsPerPage = Int32.Parse(pageSize ?? "2");
+            int pageNumber = Int32.Parse(page ?? "1");
+
+            var listings = await listingRepo.GetSortedAsync(sortOrder, locationFilter, priceRange, searchString, pageNumber, itemsPerPage);
 
             if (!listings.Any())
             {

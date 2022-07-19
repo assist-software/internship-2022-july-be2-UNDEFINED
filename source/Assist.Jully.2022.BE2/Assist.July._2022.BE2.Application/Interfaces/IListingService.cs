@@ -7,7 +7,7 @@ namespace Assist.July._2022.BE2.Application.Interfaces
     {
         Task AddAsync(PostListingRequestDto request);
         Task<IEnumerable<Listing>> GetAllListingsAsync();
-        Task<IEnumerable<Listing>> GetSortedListingsAsync(int pageNumber, int pageSize);
+        Task<IEnumerable<Listing>> GetSortedListingsAsync(string? sortOrder, string? locationFilter, string? priceRange, string? searchString, string? page, string? pageSize);
 
         Task<Listing> PutListingAsync(PostListingRequestDto request, Guid id);
         Task<Listing> GetListingByIdAsync(Guid id);
