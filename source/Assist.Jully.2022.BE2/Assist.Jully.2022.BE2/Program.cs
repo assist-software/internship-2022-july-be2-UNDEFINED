@@ -1,6 +1,8 @@
 using Assist.July._2022.BE2.Application.Helper;
 using Assist.July._2022.BE2.Application.Interfaces;
+using Assist.July._2022.BE2.Application.MiddleWare;
 using Assist.July._2022.BE2.Application.Services;
+using Assist.July._2022.BE2.Application.Utils;
 using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
 using Assist.July._2022.BE2.Infrastructure.Interfaces;
@@ -16,6 +18,7 @@ var sqlConnectionBuilder = new SqlConnectionStringBuilder(
     .Configuration
     .GetConnectionString("SqlDBConnectionString"));
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -47,10 +50,16 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlServer(sqlConnectionBuilder.ConnectionString));
+
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-builder.Services.AddTransient<IMailService, MailService>();
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.AddTransient<IMailService,MailService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddTransient<IListingService, ListingService>();
 builder.Services.AddTransient<IListingRepository, ListingRepository>();
+
 builder.Services.AddCustomConfiguredAutoMapper();
 builder.Services.AddCors(options =>
 {
@@ -67,7 +76,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
+app.UseSwagger();
     app.UseSwaggerUI();
 //}
 
@@ -78,6 +87,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 

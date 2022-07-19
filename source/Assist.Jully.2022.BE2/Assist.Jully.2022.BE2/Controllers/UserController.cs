@@ -1,102 +1,144 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Assist.July._2022.BE2.Application.Dtos.UserDtos;
+using Assist.July._2022.BE2.Application.Helper;
+using Assist.July._2022.BE2.Application.Interfaces;
+using Assist.July._2022.BE2.Application.Services;
+using Assist.July._2022.BE2.Infrastructure.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Assist.July._2022.BE2.Domain.Entities;
+using Microsoft.Extensions.Options;
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
-    [Route("api/[controller]"), ApiController, Authorize]
+    [Route("api/[controller]"), ApiController,AuthorizeAtribute]
     
     public class UserController : ControllerBase
     {
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate(User Access)
+        private IUserService UserService;
+        private IMapper Mapper;
+        private readonly AppSettings AppSetting;
+        public UserController(IUserService userService, IMapper mapper,
+            IOptions<AppSettings>appsettings)
+        {
+            UserService = userService;
+            Mapper = mapper;
+            AppSetting = appsettings.Value;
+        }
+
+        [HttpPost("Authenticate"),AllowAnonymus]
+        public async Task<IActionResult> Authenticate(LoginRequest Login)
         {
             try
             {
+                var user=await UserService.Login(Login);
+                
+                return new OkObjectResult(user);
+            }
+            catch(AppException ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+        
+        [HttpPost("Register"),AllowAnonymus]
+        public async Task<IActionResult> Register(RegisterRequest Register)
+        {
+            try
+            {
+                await UserService.Register(Register);
+
                 return new OkObjectResult("ok");
             }
-            catch
+            catch (AppException ex)
             {
                 return new BadRequestObjectResult("An error has occured");
             }
         }
         
-        [HttpPost("Register")]
-        public IActionResult Register()
+        [HttpPost("Reset/Password")]
+        public async Task<IActionResult> ResetPassword(string email)
         {
             try
             {
+                await UserService.ResetPassword(email);
+
                 return new OkObjectResult("ok");
             }
-            catch
-            {
-                return new BadRequestObjectResult("An error has occured");
-            }
-        }
-        
-        [HttpPost("reset/password")]
-        public IActionResult ResetPassword()
-        {
-            try
-            {
-                return new OkObjectResult("ok");
-            }
-            catch
+            catch(AppException ex)
             {
                 return new BadRequestObjectResult("An error has occured");
             }
         }
         
         [HttpPut("{id}")]
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(UpdateRequest Update,Guid id)
         {
             try
             {
+                await UserService.UpdateUser(Update,id);
+
                 return new OkObjectResult("ok");
             }
-            catch
+            catch (AppException ex)
             {
-                return new BadRequestObjectResult("An error has occured");
+                return new NotFoundObjectResult("User not found");
             }
         }
         
         [HttpGet("{id}")]
-        public IActionResult GetUser(int id)
+        public async Task<IActionResult> GetUser(Guid id)
         {
             try
             {
-                return new OkObjectResult("ok");
+                var user = await UserService.GetUser(id);
+
+                return new OkObjectResult(user);
             }
-            catch
+            catch(AppException ex)
             {
-                return new BadRequestObjectResult("An error has occured");
+                return new NotFoundObjectResult("User not found");
+            }
+        }
+        [HttpGet("search/{Email}")]
+        public async Task<IActionResult> GetUserEmail(string Email)
+        {
+            try
+            {
+                var user = await UserService.GetUserEmail(Email);
+
+                return new OkObjectResult(user);
+            }
+            catch(AppException ex)
+            {
+                return new NotFoundObjectResult("User not found");
             }
         }
         
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                return new OkObjectResult("ok");
+                var users = await UserService.GetAll();
+                return new OkObjectResult(users);
             }
-            catch
+            catch(AppException ex)
             {
-                return new BadRequestObjectResult("An error has occured");
+                return new NotFoundObjectResult("Database is empty");
             }
         }
         
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
+                await UserService.DeleteUser(id);
+
                 return new OkObjectResult("ok");
             }
-            catch
+            catch(AppException ex)
             {
-                return new BadRequestObjectResult("An error has occured");
+                return new NotFoundObjectResult("User not found");
             }
         }
     }
