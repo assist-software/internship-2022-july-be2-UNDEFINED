@@ -19,7 +19,7 @@ namespace Assist.July._2022.BE2.Application.MiddleWare
             var userId = jwtUtils.ValidateToken(tok);
             if (userId != null)
             {
-                context.Items["User"] = userService.GetUser(userId.Value);
+                context.Items["User"] = await userService.GetUser(userId.Value);
             }
             await _next(context);
         }
