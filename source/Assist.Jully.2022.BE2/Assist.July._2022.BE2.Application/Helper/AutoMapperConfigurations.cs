@@ -10,6 +10,7 @@ namespace Assist.July._2022.BE2.Application.Helper
         {
             var config = new MapperConfiguration(cfg =>
             {
+                cfg.AddProfile(new ListingProfileMapper());
                 cfg.AddProfile(new MessageProfile());
             });
 

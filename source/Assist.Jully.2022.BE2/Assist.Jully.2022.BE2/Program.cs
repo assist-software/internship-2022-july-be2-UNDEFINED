@@ -1,11 +1,14 @@
+using Assist.July._2022.BE2.Application.Helper;
 using Assist.July._2022.BE2.Application.Interfaces;
 using Assist.July._2022.BE2.Application.Services;
 using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
-using Assist.July._2022.BE2.Application.Helper;
+using Assist.July._2022.BE2.Infrastructure.Interfaces;
+using Assist.July._2022.BE2.Infrastructure.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+
 var allowSpecificOrigins = "allowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 var sqlConnectionBuilder = new SqlConnectionStringBuilder(
@@ -36,7 +39,6 @@ builder.Services.AddSwaggerGen(c =>
                 Type=ReferenceType.SecurityScheme,
                 Id="bearer"
             }
-
         },
         new string[]{}
         }
@@ -46,8 +48,9 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlServer(sqlConnectionBuilder.ConnectionString));
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-builder.Services.AddTransient<IMailService,MailService>();
-builder.Services.AddTransient<IMessageService, MessageService>();
+builder.Services.AddTransient<IMailService, MailService>();
+builder.Services.AddTransient<IListingService, ListingService>();
+builder.Services.AddTransient<IListingRepository, ListingRepository>();
 builder.Services.AddCustomConfiguredAutoMapper();
 builder.Services.AddCors(options =>
 {

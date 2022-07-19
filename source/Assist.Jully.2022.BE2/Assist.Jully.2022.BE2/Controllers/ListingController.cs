@@ -1,16 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Assist.July._2022.BE2.Application.Dtos.ListingDtos;
+using Assist.July._2022.BE2.Application.Interfaces;
+using Assist.July._2022.BE2.Domain.Entities;
+using Assist.July._2022.BE2.Infrastructure.Contexts;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
     [ApiController, Route("api/[controller]"), Produces("application/json")]
     public class ListingController : Controller
     {
+        private IListingService listingService;
+        private readonly ApplicationDbContext applicationDbContext;
+
+        public ListingController(IListingService listingService, ApplicationDbContext applicationDbContext)
+        {
+            this.listingService = listingService;
+            this.applicationDbContext = applicationDbContext;
+        }
+
         [HttpPost("create")]
-        public IActionResult CreateNewListing()
+        public async Task<IActionResult> CreateNewListing(PostListingRequestDto request)
         {
             try
             {
-                return new OkObjectResult("Create new listing");
+                await listingService.AddAsync(request);
+
+                return Ok("Listing Added");
             }
             catch(Exception)
             {
@@ -19,11 +34,18 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllListings()
+        public async Task<ActionResult<List<Listing>>> GetAllListings()
         {
             try
             {
-                return new OkObjectResult("Get all listings");
+                var response = await listingService.GetAllListingsAsync();
+
+                if (response == null)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(response);
             }
             catch (Exception)
             {
@@ -32,10 +54,19 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateAListing()
+        public async Task<IActionResult> UpdateListing([FromBody]PostListingRequestDto request, Guid id)
         {
             try
             {
+                var response = await listingService.PutListingAsync(request, id);
+
+                if (response == null)
+                { 
+                    return NotFound(); 
+                }
+
+                await applicationDbContext.SaveChangesAsync();
+
                 return new OkObjectResult("Update a listing");
             }
             catch (Exception)
@@ -45,11 +76,18 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetAListing()
+        public async Task<ActionResult> GetAListing(Guid id)
         {
             try
             {
-                return new OkObjectResult("Get a listing");
+                var response = await listingService.GetListingByIdAsync(id);
+
+                if (response == null)
+                { 
+                    return NotFound(); 
+                }
+
+                return Ok(response);
             }
             catch (Exception)
             {
@@ -58,11 +96,18 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteAListing()
+        public async Task<IActionResult> DeleteAListing(Guid id)
         {
             try
             {
-                return new OkObjectResult("Delete a listing");
+                var response = await listingService.DeleteListingAsync(id);
+
+                if (response == null)
+                { 
+                    return NotFound(); 
+                }
+
+                return Ok("Listing deleted");
             }
             catch (Exception)
             {
