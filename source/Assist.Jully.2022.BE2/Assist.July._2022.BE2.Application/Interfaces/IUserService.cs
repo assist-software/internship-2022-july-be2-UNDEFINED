@@ -6,7 +6,7 @@ namespace Assist.July._2022.BE2.Application.Interfaces
     public interface IUserService
     {
         Task<User> Login(LoginRequest Login);
-        Task Register(RegisterRequest Register);
+        Task Register(string Email,string Password);
         Task<User> GetUser(Guid Id);
         Task<User> GetUserEmail(string Email);
         Task ResetPassword(string Email);
