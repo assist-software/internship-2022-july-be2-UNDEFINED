@@ -1,44 +1,77 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Assist.July._2022.BE2.Application.Dtos.MessageDtos;
+using Assist.July._2022.BE2.Application.Interfaces;
+
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
     [ApiController, Route("api/[controller]"), Produces("application/json")]
     public class MessageController : Controller
     {
-        [HttpPost("{listingId}/{userId}")]
-        public IActionResult SendingNewMessage()
+        private IMessageService messageService;
+
+        public MessageController(IMessageService messageService)
+        {
+            this.messageService = messageService;
+        }
+
+        [HttpPost("new")]
+        public async Task <IActionResult> SendingNewMessage(PostMessageDto request)
         {
             try
             {
-                return new OkObjectResult("Sending new message");
+                await messageService.PostAsync(request);
+
+                return StatusCode(StatusCodes.Status201Created);
             }
             catch (Exception)
             {
                 return BadRequest("An error has occured");
             }
         }
+
         [HttpGet("{listingId}")]
-        public IActionResult GetAllMessages()
+        public async Task<IActionResult> GetAllMessages(Guid listingId)
         {
             try
             {
-                return new OkObjectResult("Get all messages");
+                var allMessages = await messageService.GetAllAsync(listingId);
+
+                return new OkObjectResult(allMessages);
             }
             catch (Exception)
             {
-                return BadRequest("An error has occured");
+                return StatusCode(StatusCodes.Status404NotFound);
             }
         }
-        [HttpDelete("{listingId}")]
-        public IActionResult DeleteAllMessages()
+
+        [HttpDelete("deleteAll/{listingId}")]
+        public IActionResult DeleteAllMessages(Guid listingId)
         {
             try
             {
-                return new OkObjectResult("Delete all messages");
+                messageService.DeleteAllAsync(listingId);
+
+                return new OkObjectResult("All messages have been deleted!");
             }
             catch (Exception)
             {
-                return BadRequest("An error has occured");
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpDelete("{messageId}")]
+        public async Task<IActionResult> DeleteMessage(Guid messageId)
+        {
+            try
+            {
+                await messageService.DeleteAsync(messageId);
+
+                return new OkObjectResult("Message deleted!");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
             }
         }
     }
