@@ -8,17 +8,21 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
     public class FavoriteRepository : IFavoriteRepository
     {
         private readonly ApplicationDbContext applicationDbContext;
+        private IListingRepository listingRepository;
 
-        public FavoriteRepository(ApplicationDbContext applicationDbContext)
+        public FavoriteRepository(ApplicationDbContext applicationDbContext, IListingRepository listingRepository)
         {
             this.applicationDbContext = applicationDbContext;
+            this.listingRepository = listingRepository;
         }
 
         public async Task<IEnumerable<Listing>> GetAllListingsByUserIdAsync(Guid userId)
         {
+            //returneaza o lista de favorite
             var favoritesList = await applicationDbContext.Favorites.Where(x => x.Users.Id == userId).ToListAsync();
-            
-            if(!favoritesList.Any())
+            //var favoritesList = await applicationDbContext.Favorites.ToListAsync();
+
+            if (!favoritesList.Any())
             {
                 return null;
             }
@@ -27,7 +31,8 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
 
             foreach(Favorite favorite in favoritesList)
             {
-                listingList.Add(await applicationDbContext.Listings.FindAsync(favorite.Listings.Id));
+                //listingList.Add(await applicationDbContext.Listings.FindAsync(favorite.Listings.Id));
+                listingList.Add(await listingRepository.GetByIdAsync(favorite.Listings.Id));
             }
 
             if(!listingList.Any())

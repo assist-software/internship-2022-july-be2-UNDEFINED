@@ -54,11 +54,11 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
 
         [HttpDelete("{favoriteId}")]
-        public async Task<IActionResult> DeleteListingFromFavorites(Guid id)
+        public async Task<IActionResult> DeleteListingFromFavorites(Guid favoriteId)
         {
             try
             {
-                var response = await favoriteService.DeleteAsync(id);
+                var response = await favoriteService.DeleteAsync(favoriteId);
 
                 if (response == null)
                 {
