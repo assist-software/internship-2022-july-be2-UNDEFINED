@@ -33,21 +33,6 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
         }
 
-        //[HttpPost("{userId},{listingId}")]//-----
-        //public async Task<IActionResult> SaveFavoriteItemUsingId(Guid userId, Guid listingId)
-        //{
-        //    try
-        //    {
-        //        //await favoriteService.PostAsync(request);
-
-        //        return Ok("Listing has been favored!");
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return BadRequest("An error has occured");
-        //    }
-        //}
-
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetFavorites(Guid userId)
         {
