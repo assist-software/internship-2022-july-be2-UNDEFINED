@@ -42,7 +42,6 @@ builder.Services.AddSwaggerGen(c =>
                 Type=ReferenceType.SecurityScheme,
                 Id="bearer"
             }
-
         },
         new string[]{}
         }
@@ -58,6 +57,9 @@ builder.Services.AddTransient<IMailService,MailService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
+builder.Services.AddTransient<IListingService, ListingService>();
+builder.Services.AddTransient<IListingRepository, ListingRepository>();
+
 builder.Services.AddCustomConfiguredAutoMapper();
 builder.Services.AddCors(options =>
 {
