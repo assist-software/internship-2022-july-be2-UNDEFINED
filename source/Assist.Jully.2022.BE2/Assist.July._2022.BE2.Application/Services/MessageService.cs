@@ -66,13 +66,12 @@ namespace Assist.July._2022.BE2.Application.Services
 
         public async Task PostAsync(PostMessageDto request)
         {
-            if(request.Content != null)
+            if(request.Content == null)
             {
                 throw new ArgumentNullException(nameof(request.Content));
             }
 
             Message newMessage = mapper.Map<Message>(request);
-            newMessage.Id = Guid.NewGuid();
 
             applicationDbContext.Messages.Add(newMessage);
 
