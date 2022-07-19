@@ -7,10 +7,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Assist.July._2022.BE2.Application.Services
+namespace Assist.July._2022.BE2.Application.Utils
 {
-    
-    public class JwtUtils:IJwtUtils
+
+    public class JwtUtils : IJwtUtils
     {
         private readonly AppSettings AppSetting;
         public JwtUtils(IOptions<AppSettings> appsettings)
@@ -24,9 +24,9 @@ namespace Assist.July._2022.BE2.Application.Services
             var key = Encoding.ASCII.GetBytes(AppSetting.SecretCode);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString().ToUpper())}),
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString().ToUpper()) }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), 
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -37,14 +37,14 @@ namespace Assist.July._2022.BE2.Application.Services
             if (Token == null)
                 return null;
             var TokenHandler = new JwtSecurityTokenHandler();
-            var key=Encoding.ASCII.GetBytes(AppSetting.SecretCode);
+            var key = Encoding.ASCII.GetBytes(AppSetting.SecretCode);
             TokenHandler.ValidateToken(Token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = false,
-                ValidateAudience=false,
-                ClockSkew=TimeSpan.Zero
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
             }, out SecurityToken ValidatedToken
                 );
             var JwtToken = (JwtSecurityToken)ValidatedToken;

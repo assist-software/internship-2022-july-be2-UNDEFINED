@@ -1,8 +1,12 @@
 using Assist.July._2022.BE2.Application.Helper;
 using Assist.July._2022.BE2.Application.Interfaces;
+using Assist.July._2022.BE2.Application.MiddleWare;
 using Assist.July._2022.BE2.Application.Services;
+using Assist.July._2022.BE2.Application.Utils;
 using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
+using Assist.July._2022.BE2.Infrastructure.Interfaces;
+using Assist.July._2022.BE2.Infrastructure.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -52,6 +56,7 @@ builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailS
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddTransient<IMailService,MailService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddCustomConfiguredAutoMapper();
 builder.Services.AddCors(options =>

@@ -5,6 +5,7 @@ using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
 using AutoMapper;
 using Assist.July._2022.BE2.Application.Dtos.MailDtos;
+using Assist.July._2022.BE2.Infrastructure.Interfaces;
 
 namespace Assist.July._2022.BE2.Application.Services
 {
@@ -14,28 +15,30 @@ namespace Assist.July._2022.BE2.Application.Services
         ApplicationDbContext applicationDbContext;
         readonly IMapper Mapper;
         private IJwtUtils JwtUtil;
+        private IUserRepository UserRepository;
         public UserService(ApplicationDbContext DataBase,IMapper mapper, IMailService mailService
-            , IJwtUtils jwtUtil)
+            , IJwtUtils jwtUtil,IUserRepository UserRepo)
         {
             applicationDbContext = DataBase;
             Mapper = mapper;
             MailService = mailService;
             JwtUtil = jwtUtil;
+            UserRepository = UserRepo;
         }
 
-        public User Login(LoginRequest Login)
+        public async Task<User> Login(LoginRequest Login)
         {
-            var user = applicationDbContext.Users.SingleOrDefault(x => x.Email == Login.Email);
+            var user = await UserRepository.GetByEmaiAsync(Login.Email);
             if (user == null || user.Password != Login.Password)
                 throw new AppException("Username or password is incorrect");
             user.Token = JwtUtil.GenerateToken(user);
-            applicationDbContext.Update(user);
-            applicationDbContext.SaveChanges();
+            await UserRepository.PutAsync(user);
             return user;
         }
-        public void Register(RegisterRequest Register)
+        public async Task Register(RegisterRequest Register)
         {
-            if (applicationDbContext.Users.Any(x => x.Email == Register.Email))
+            var email = await UserRepository.GetByEmaiAsync(Register.Email);
+            if (email!=null)
                 throw new AppException("Email " + Register.Email + " is already taken");
             
             var user = Mapper.Map<User>(Register);
@@ -44,20 +47,28 @@ namespace Assist.July._2022.BE2.Application.Services
             user.UpdatedAt = DateTime.Now;
             if (user.Password == String.Empty)
                 throw new AppException("Password Required");
-            applicationDbContext.Users.AddAsync(user);
-            applicationDbContext.SaveChanges();
+            await UserRepository.AddAsync(user);
+            await UserRepository.PutAsync(user);
         }
-        public User GetUser(Guid Id)
+        public async Task<User> GetUser(Guid Id)
         {
-            var user = applicationDbContext.Users.Find(Id);
+            var user = await UserRepository.GetByIdAsync(Id);
             if (user == null)
                 throw new AppException("User not found");
 
             return user;
         }
-        public void ResetPassword(string Email)
+        public async Task<User> GetUserEmail(string Email)
         {
-            var user = applicationDbContext.Users.SingleOrDefault(x => x.Email == Email);
+            var user = await UserRepository.GetByEmaiAsync(Email);
+            if (user == null)
+                throw new AppException("Mail not found");
+
+            return user;
+        }
+        public async Task ResetPassword(string Email)
+        {
+            var user =await UserRepository.GetByEmaiAsync(Email);
             if (user == null)
                 throw new AppException("Wrong Mail");
             user.Password = CreateNewPassword();
@@ -66,31 +77,28 @@ namespace Assist.July._2022.BE2.Application.Services
             MailToSend.ToEmail = Email;
             MailToSend.Subject = "New Password";
             MailToSend.Body = user.Password;
-            MailService.SendEmailAsync(MailToSend);
-            applicationDbContext.Update(user);
-            applicationDbContext.SaveChangesAsync();
+            await UserRepository.PutAsync(user);
+            await MailService.SendEmailAsync(MailToSend);
+            
+            
         }
-        public void UpdateUser(UpdateRequest Update,Guid id)
+        public async Task UpdateUser(UpdateRequest Update,Guid id)
         {
-            var user = GetUser(id);
-            if (!(string.IsNullOrEmpty(Update.Password))&&Update.Password.Length>=8)
-                user.Password = Update.Password;
+            var user = await UserRepository.GetByIdAsync(id);
             Mapper.Map(Update, user);
-            user.UpdatedAt = DateTime.Now;
-            applicationDbContext.Users.Update(user);
-            applicationDbContext.SaveChangesAsync();
+            await UserRepository.PutAsync(user);
         }
-        public IEnumerable<User>GetAll()
+        public async Task<IEnumerable<User>>GetAll()
         {
-            return applicationDbContext.Users;
+            var user = await UserRepository.GetAllAsync();
+            return user;
         }
-        public void DeleteUser(Guid Id)
+        public async Task DeleteUser(Guid Id)
         {
-            var user = GetUser(Id);
+            var user = await UserRepository.GetByIdAsync(Id);
             if (user == null)
                 throw new AppException("User not found");
-            applicationDbContext.Users.Remove(user);
-            applicationDbContext.SaveChangesAsync();
+            await UserRepository.DeleteAsync(user);
         }
         string CreateNewPassword()
         {

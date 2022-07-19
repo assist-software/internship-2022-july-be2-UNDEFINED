@@ -2,6 +2,7 @@
 using Assist.July._2022.BE2.Application.Helper;
 using Assist.July._2022.BE2.Application.Interfaces;
 using Assist.July._2022.BE2.Application.Services;
+using Assist.July._2022.BE2.Infrastructure.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -23,13 +24,12 @@ namespace Assist.Jully._2022.BE2.Controllers
             AppSetting = appsettings.Value;
         }
 
-        [HttpPost("authenticate"),AllowAnonymus]
-        public IActionResult Authenticate(LoginRequest Login)
+        [HttpPost("Authenticate"),AllowAnonymus]
+        public async Task<IActionResult> Authenticate(LoginRequest Login)
         {
             try
             {
-                var user=UserService.Login(Login);
-
+                var user=await UserService.Login(Login);
                 return new OkObjectResult(user);
             }
             catch(AppException ex)
@@ -39,11 +39,11 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
         
         [HttpPost("Register"),AllowAnonymus]
-        public IActionResult Register(RegisterRequest Register)
+        public async Task<IActionResult> Register(RegisterRequest Register)
         {
             try
             {
-                UserService.Register(Register);
+                await UserService.Register(Register);
 
                 return new OkObjectResult("ok");
             }
@@ -53,12 +53,12 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
         }
         
-        [HttpPost("reset/password")]
-        public IActionResult ResetPassword(string email)
+        [HttpPost("Reset/Password")]
+        public async Task<IActionResult> ResetPassword(string email)
         {
             try
             {
-                UserService.ResetPassword(email);
+                await UserService.ResetPassword(email);
 
                 return new OkObjectResult("ok");
             }
@@ -69,11 +69,11 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
         
         [HttpPut("{id}")]
-        public IActionResult Update(UpdateRequest Update,Guid id)
+        public async Task<IActionResult> Update(UpdateRequest Update,Guid id)
         {
             try
             {
-                UserService.UpdateUser(Update,id);
+                await UserService.UpdateUser(Update,id);
 
                 return new OkObjectResult("ok");
             }
@@ -84,11 +84,25 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
         
         [HttpGet("{id}")]
-        public IActionResult GetUser(Guid id)
+        public async Task<IActionResult> GetUser(Guid id)
         {
             try
             {
-                var user = UserService.GetUser(id);
+                var user = await UserService.GetUser(id);
+
+                return new OkObjectResult(user);
+            }
+            catch(AppException ex)
+            {
+                return new NotFoundObjectResult("User not found");
+            }
+        }
+        [HttpGet("search/{Email}")]
+        public async Task<IActionResult> GetUserEmail(string Email)
+        {
+            try
+            {
+                var user = await UserService.GetUserEmail(Email);
 
                 return new OkObjectResult(user);
             }
@@ -99,11 +113,12 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
         
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             try
-            { 
-                return new OkObjectResult(UserService.GetAll());
+            {
+                var users = await UserService.GetAll();
+                return new OkObjectResult(users);
             }
             catch(AppException ex)
             {
@@ -112,11 +127,11 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
         
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                UserService.DeleteUser(id);
+                await UserService.DeleteUser(id);
 
                 return new OkObjectResult("ok");
             }

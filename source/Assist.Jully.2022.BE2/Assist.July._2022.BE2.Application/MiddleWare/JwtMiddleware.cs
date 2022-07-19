@@ -1,7 +1,7 @@
 ﻿using Assist.July._2022.BE2.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 
-namespace Assist.July._2022.BE2.Application.Helper
+namespace Assist.July._2022.BE2.Application.MiddleWare
 {
 
     public class JwtMiddleware
@@ -14,9 +14,9 @@ namespace Assist.July._2022.BE2.Application.Helper
         }
         public async Task Invoke(HttpContext context, IUserService userService, IJwtUtils jwtUtils)
         {
-     
+
             var tok = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var userId =jwtUtils.ValidateToken(tok);
+            var userId = jwtUtils.ValidateToken(tok);
             if (userId != null)
             {
                 context.Items["User"] = userService.GetUser(userId.Value);
