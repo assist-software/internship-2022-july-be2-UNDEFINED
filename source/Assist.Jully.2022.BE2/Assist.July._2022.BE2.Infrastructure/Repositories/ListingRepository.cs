@@ -22,6 +22,7 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
         {
             int TotalItemCount;
             string[] range = null;
+
             if (priceRange != null)
                range = priceRange.Split(" - ");
 
@@ -32,7 +33,7 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
                 return null;
             }
 
-            if (sortOrder == "Cresc")
+            if (sortOrder == "LowToHigh")
             {
                 return await applicationDbContext.Listings
                     .Where(x => x.Location == (locationFilter ?? x.Location))
@@ -42,7 +43,9 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
                     .Skip(pageNumber == 1 ? 0 : (pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
-            } else if(sortOrder == "Desc")
+            } 
+
+            if(sortOrder == "HighToLow")
             {
                 return await applicationDbContext.Listings
                     .Where(x => x.Location == (locationFilter ?? x.Location))
@@ -52,15 +55,27 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
                     .Skip(pageNumber == 1 ? 0 : (pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
-            }else
+            }
+
+            if (sortOrder == "Popular")
+            {
                 return await applicationDbContext.Listings
                     .Where(x => x.Location == (locationFilter ?? x.Location))
                     .Where(x => priceRange != null ? x.Price >= Int32.Parse(range[0]) && x.Price <= Int32.Parse(range[1]) : x.Price == x.Price)
-                    //.Where(x => x.Category == (category ?? x.Category))
+                    .Where(x => x.Category == (category ?? x.Category))
+                    .OrderBy(x => x.ViewCounter)
                     .Skip(pageNumber == 1 ? 0 : (pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
+            }
 
+            return await applicationDbContext.Listings
+                .Where(x => x.Location == (locationFilter ?? x.Location))
+                .Where(x => priceRange != null ? x.Price >= Int32.Parse(range[0]) && x.Price <= Int32.Parse(range[1]) : x.Price == x.Price)
+                .Where(x => x.Category == (category ?? x.Category))
+                .Skip(pageNumber == 1 ? 0 : (pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task AddAsync(Listing listing)
