@@ -6,6 +6,8 @@ using Assist.July._2022.BE2.Infrastructure.Contexts;
 using AutoMapper;
 using Assist.July._2022.BE2.Application.Dtos.MailDtos;
 using Assist.July._2022.BE2.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace Assist.July._2022.BE2.Application.Services
 {
@@ -90,6 +92,7 @@ namespace Assist.July._2022.BE2.Application.Services
             
             
         }
+
         public async Task UpdateUser(UpdateRequest Update,Guid id)
         {
             var user = await UserRepository.GetByIdAsync(id);
@@ -98,6 +101,7 @@ namespace Assist.July._2022.BE2.Application.Services
             Mapper.Map(Update, user);
             await UserRepository.PutAsync(user);
         }
+       
         public async Task<IEnumerable<User>>GetAll()
         {
             var user = await UserRepository.GetAllAsync();
