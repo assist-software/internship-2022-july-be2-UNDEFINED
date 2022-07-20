@@ -18,10 +18,12 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
         {
             return await applicationDbContext.Listings.ToListAsync();
         }
-        public async Task<IEnumerable<Listing>> GetSortedAsync(string? sortOrder, string? locationFilter, string? priceRange, string? searchString, int pageNumber, int pageSize)
+        public async Task<IEnumerable<Listing>> GetSortedAsync(string? sortOrder, string? locationFilter, string? priceRange, string? searchString, string? category, int pageNumber, int pageSize)
         {
             int TotalItemCount;
-            string[] range = priceRange.Split(" - ");
+            string[] range = null;
+            if (priceRange != null)
+               range = priceRange.Split(" - ");
 
             TotalItemCount = await applicationDbContext.Listings.CountAsync();
 
@@ -35,23 +37,29 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
                 return await applicationDbContext.Listings
                     .Where(x => x.Location == (locationFilter ?? x.Location))
                     .Where(x => priceRange != null ? x.Price <= Int32.Parse(range[0]) && x.Price >= Int32.Parse(range[1]) : x.Price == x.Price)
+                    .Where(x => x.Category == (category ?? x.Category))
                     .OrderBy(x => x.Price)
                     .Skip(pageNumber == 1 ? 0 : (pageNumber - 1) * pageSize)
-                    .Take(pageSize).ToListAsync();
+                    .Take(pageSize)
+                    .ToListAsync();
             } else if(sortOrder == "Desc")
             {
                 return await applicationDbContext.Listings
                     .Where(x => x.Location == (locationFilter ?? x.Location))
                     .Where(x => priceRange != null ? x.Price <= Int32.Parse(range[0]) && x.Price > Int32.Parse(range[1]) : x.Price == x.Price)
+                    .Where(x => x.Category == (category ?? x.Category))
                     .OrderByDescending(x => x.Price)
                     .Skip(pageNumber == 1 ? 0 : (pageNumber - 1) * pageSize)
-                    .Take(pageSize).ToListAsync();
+                    .Take(pageSize)
+                    .ToListAsync();
             }else
                 return await applicationDbContext.Listings
                     .Where(x => x.Location == (locationFilter ?? x.Location))
                     .Where(x => priceRange != null ? x.Price >= Int32.Parse(range[0]) && x.Price <= Int32.Parse(range[1]) : x.Price == x.Price)
+                    //.Where(x => x.Category == (category ?? x.Category))
                     .Skip(pageNumber == 1 ? 0 : (pageNumber - 1) * pageSize)
-                    .Take(pageSize).ToListAsync();
+                    .Take(pageSize)
+                    .ToListAsync();
 
         }
 

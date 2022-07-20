@@ -53,11 +53,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
         }
         [HttpGet("sort/")]
-        public async Task<ActionResult<List<Listing>>> GetSortedListingsAsync(string? sortOrder, string? locationFilter, string? priceRange, string? searchString, string? page, string? pageSize)
+        public async Task<ActionResult<List<Listing>>> GetSortedListingsAsync(string? sortOrder, string? locationFilter, string? priceRange, string? searchString,string? categories, string? page, string? pageSize)
         {
             try
             {
-                var response = await listingService.GetSortedListingsAsync(sortOrder, locationFilter, priceRange, searchString, page, pageSize);
+                var response = await listingService.GetSortedListingsAsync(sortOrder, locationFilter, priceRange, searchString,categories, page, pageSize);
 
                 if (response == null)
                 {

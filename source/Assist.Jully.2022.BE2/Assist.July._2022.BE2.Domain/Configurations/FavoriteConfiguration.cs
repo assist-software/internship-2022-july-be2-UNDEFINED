@@ -13,11 +13,13 @@ namespace Assist.July._2022.BE2.Domain.Configurations
 
             builder
                 .HasOne(entity => entity.Users)
-                .WithMany(entity => entity.Favorites);
+                .WithMany(entity => entity.Favorites)
+                .HasForeignKey(entity => entity.UserId);
 
             builder
                 .HasOne(entity => entity.Listings)
-                .WithMany(entity => entity.FavoredBy);
+                .WithMany(entity => entity.FavoredBy)
+                .HasForeignKey(entity => entity.ListingId);
         }
     }
 }
