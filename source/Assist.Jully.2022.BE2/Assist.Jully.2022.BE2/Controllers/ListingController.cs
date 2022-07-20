@@ -32,6 +32,20 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return BadRequest("An error has occured");
             }
         }
+        [HttpPost("create/Dto")]
+        public async Task<IActionResult> CreateNewListingDto(ListingDto request)
+        {
+            try
+            {
+                await listingService.AddAsyncDto(request);
+
+                return Ok("Listing Added");
+            }
+            catch (Exception)
+            {
+                return BadRequest("An error has occured");
+            }
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<Listing>>> GetAllListings()

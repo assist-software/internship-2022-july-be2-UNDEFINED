@@ -20,6 +20,7 @@ namespace Assist.July._2022.BE2.Application.Helper
                             && string.IsNullOrEmpty((string)prop)) return false;
                         return true;
                     }));
+            CreateMap<ListingDto, Listing>().ForMember(dest => dest.Location, act => act.Ignore());
         }
     }
 }

@@ -6,6 +6,7 @@ namespace Assist.July._2022.BE2.Application.Interfaces
     public interface IListingService
     {
         Task AddAsync(PostListingRequestDto request);
+        Task AddAsyncDto(ListingDto request);
         Task<IEnumerable<Listing>> GetAllListingsAsync();
         Task<IEnumerable<Listing>> GetSortedListingsAsync(SortListingDto sortListingDto);
         Task<Listing> PutListingAsync(PostListingRequestDto request, Guid id);

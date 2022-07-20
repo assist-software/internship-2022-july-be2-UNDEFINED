@@ -4,6 +4,7 @@ using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
 using Assist.July._2022.BE2.Infrastructure.Interfaces;
 using AutoMapper;
+using System.Text;
 
 namespace Assist.July._2022.BE2.Application.Services
 {
@@ -20,6 +21,23 @@ namespace Assist.July._2022.BE2.Application.Services
         public async Task AddAsync(PostListingRequestDto request)
         {
             Listing newListing = mapper.Map<Listing>(request);
+            await listingRepo.AddAsync(newListing);
+        }
+        public async Task AddAsyncDto(ListingDto request) // ------- Temporary Solution -----------------//
+        {
+            StringBuilder location = new StringBuilder();
+
+            location.Append(request.Location.city);
+            location.Append(request.Location.country);
+            location.Append(request.Location.lat.ToString());
+            location.Append(request.Location.lng.ToString());
+            location.Append(request.Location.state);
+            location.Append(request.Location.zip);
+
+            Listing newListing = mapper.Map<Listing>(request);
+            newListing.Location = location.ToString();
+            // de testat daca imi merge. dau run scriu un obiect intreg. de obs cum se stocheaza.
+            // daca e oke, de facut invers.
             await listingRepo.AddAsync(newListing);
         }
         public async Task<IEnumerable<Listing>> GetAllListingsAsync()
