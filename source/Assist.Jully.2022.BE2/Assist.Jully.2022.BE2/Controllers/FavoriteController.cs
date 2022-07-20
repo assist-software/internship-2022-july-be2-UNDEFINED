@@ -10,16 +10,14 @@ namespace Assist.Jully._2022.BE2.Controllers
     public class FavoriteController : Controller
     {
         private IFavoriteService favoriteService;
-        //private readonly ApplicationDbContext applicationDbContext;
 
-        public FavoriteController(IFavoriteService favoriteService/*, ApplicationDbContext applicationDbContext*/)
+        public FavoriteController(IFavoriteService favoriteService)
         {
             this.favoriteService = favoriteService;
-            //this.applicationDbContext = applicationDbContext;
         }
 
         [HttpPost("addToFavorites")]
-        public async Task<IActionResult> SaveFavoriteItem(PostFavoriteDto request)
+        public async Task<IActionResult> SaveFavoriteItem(FavoriteDto request)
         {
             try
             {

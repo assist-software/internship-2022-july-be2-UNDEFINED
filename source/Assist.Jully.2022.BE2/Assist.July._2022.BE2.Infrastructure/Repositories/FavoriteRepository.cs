@@ -1,6 +1,7 @@
 ﻿using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
 using Assist.July._2022.BE2.Infrastructure.Interfaces;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Assist.July._2022.BE2.Infrastructure.Repositories
@@ -18,24 +19,16 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
 
         public async Task<IEnumerable<Listing>> GetAllListingsByUserIdAsync(Guid userId)
         {
-            //returneaza o lista de favorite
-            var favoritesList = await applicationDbContext.Favorites.Where(x => x.Users.Id == userId).ToListAsync();
-            //var favoritesList = await applicationDbContext.Favorites.ToListAsync();
-
-            if (!favoritesList.Any())
-            {
-                return null;
-            }
+            var favoritesList = await applicationDbContext.Favorites.Include(favorite => favorite.Users).Include(favorite => favorite.Listings).Where(favorite => favorite.Users.Id == userId).ToListAsync();
 
             List<Listing> listingList = new List<Listing>();
 
-            foreach(Favorite favorite in favoritesList)
+            foreach (var variable in favoritesList)
             {
-                //listingList.Add(await applicationDbContext.Listings.FindAsync(favorite.Listings.Id));
-                listingList.Add(await listingRepository.GetByIdAsync(favorite.Listings.Id));
+                listingList.Add(await listingRepository.GetByIdAsync(variable.Listings.Id));
             }
 
-            if(!listingList.Any())
+            if (!listingList.Any())
             {
                 return null;
             }

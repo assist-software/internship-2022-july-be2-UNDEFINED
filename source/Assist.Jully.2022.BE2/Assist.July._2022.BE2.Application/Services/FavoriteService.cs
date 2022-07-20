@@ -23,7 +23,7 @@ namespace Assist.July._2022.BE2.Application.Services
             this.listingRepository = listingRepository;
         }
 
-        public async Task PostAsync(PostFavoriteDto request)
+        public async Task PostAsync(FavoriteDto request)
         {
             Favorite newFavorite = new Favorite();
             User user = await userRepository.GetByIdAsync(request.UserId);

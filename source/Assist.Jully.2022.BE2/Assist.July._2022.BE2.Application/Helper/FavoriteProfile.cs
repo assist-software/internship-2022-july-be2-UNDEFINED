@@ -8,8 +8,8 @@ namespace Assist.July._2022.BE2.Application.Helper
     {
         public FavoriteProfile()
         {
-            CreateMap<Favorite, PostFavoriteDto>();
-            CreateMap<PostFavoriteDto, Favorite>();
+            CreateMap<Favorite, FavoriteDto>();
+            CreateMap<FavoriteDto, Favorite>();
             CreateMap<Favorite, Favorite>();
         }
     }
