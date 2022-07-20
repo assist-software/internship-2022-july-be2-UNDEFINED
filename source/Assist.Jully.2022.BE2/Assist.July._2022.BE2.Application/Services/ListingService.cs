@@ -33,6 +33,21 @@ namespace Assist.July._2022.BE2.Application.Services
 
             return listings;
         }
+
+        public async Task<IEnumerable<Listing>> GetSortedListingsAsync(SortListingDto sortListingDto)
+        {
+            int itemsPerPage = Int32.Parse(sortListingDto.pageSize ?? "10");
+            int pageNumber = Int32.Parse(sortListingDto.page ?? "1");
+
+            var listings = await listingRepo.GetSortedAsync(sortListingDto.sortOrder, sortListingDto.locationFilter, sortListingDto.priceRange, sortListingDto.searchString, sortListingDto.category, pageNumber, itemsPerPage);
+
+            if (!listings.Any())
+            {
+                throw new KeyNotFoundException("No Listings found");
+            }
+
+            return listings;
+        }
         public async Task<Listing> PutListingAsync(PostListingRequestDto request, Guid id)
         {
             var dbListing = await listingRepo.GetByIdAsync(id);
