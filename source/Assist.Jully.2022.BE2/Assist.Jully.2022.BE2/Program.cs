@@ -56,6 +56,7 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 builder.Services.AddTransient<IMailService,MailService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddTransient<IListingService, ListingService>();
 builder.Services.AddTransient<IListingRepository, ListingRepository>();

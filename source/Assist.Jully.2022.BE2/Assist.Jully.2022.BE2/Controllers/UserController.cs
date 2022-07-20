@@ -50,11 +50,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch (AppException ex)
             {
-                return new BadRequestObjectResult("An error has occured");
+                return new BadRequestObjectResult("Error");
             }
         }
         
-        [HttpPost("Reset/Password")]
+        [HttpPost("Reset/Password"),AllowAnonymus]
         public async Task<IActionResult> ResetPassword(string email)
         {
             try
@@ -65,7 +65,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch(AppException ex)
             {
-                return new BadRequestObjectResult("An error has occured");
+                return new BadRequestObjectResult("Mail Not Found");
             }
         }
         
