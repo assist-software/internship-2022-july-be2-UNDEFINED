@@ -5,8 +5,8 @@ namespace Assist.July._2022.BE2.Application.Interfaces
 {
     public interface IFavoriteService
     {
-        Task PostAsync(FavoriteDto request);
+        Task<FavoriteDto> PostAsync(FavoriteDto request);
         Task <IEnumerable<Listing>>GetAsync(Guid userId);
-        Task<Favorite> DeleteAsync(Guid id);
+        Task DeleteAsync(Guid id);
     }
 }

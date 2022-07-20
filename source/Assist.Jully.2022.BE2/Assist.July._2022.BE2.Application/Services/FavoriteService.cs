@@ -23,7 +23,7 @@ namespace Assist.July._2022.BE2.Application.Services
             this.listingRepository = listingRepository;
         }
 
-        public async Task PostAsync(FavoriteDto request)
+        public async Task<FavoriteDto> PostAsync(FavoriteDto request)
         {
             Favorite newFavorite = new Favorite();
             User user = await userRepository.GetByIdAsync(request.UserId);
@@ -31,25 +31,24 @@ namespace Assist.July._2022.BE2.Application.Services
             newFavorite.Users = user;
             newFavorite.Listings = listing;
 
-            await favoriteRepo.PostAsync(newFavorite);
+            FavoriteDto response = new FavoriteDto();
+            response.ListingId = request.ListingId;
+            response.UserId = request.UserId;
+
+            await favoriteRepo.PostAsync(newFavorite); 
+            
+            return response;
         }
-        public async Task<IEnumerable<Listing>> GetAsync(Guid userId)//imi returneaza o lista cu toate favoritele unui user
+        public async Task<IEnumerable<Listing>> GetAsync(Guid userId)
         {
             return await favoriteRepo.GetAllListingsByUserIdAsync(userId);
         }
 
-        public async Task<Favorite> DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             var dbFavorite = await favoriteRepo.GetFavoriteByIdAsync(id);
 
-            if(dbFavorite == null)
-            {
-                return null;
-            }
-
             await favoriteRepo.DeleteAsync(dbFavorite);
-
-            return dbFavorite;
         }
     }
 }

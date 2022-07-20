@@ -17,13 +17,18 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
 
         [HttpPost("addToFavorites")]
-        public async Task<IActionResult> SaveFavoriteItem(FavoriteDto request)
+        public async Task<ActionResult<FavoriteDto>> SaveFavoriteItem(FavoriteDto request)
         {
             try
             {
-                await favoriteService.PostAsync(request);
+                var response = await favoriteService.PostAsync(request);
 
-                return Ok("Listing has been favored!");
+                if (response == null)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(response);
             }
             catch (Exception)
             {
@@ -56,12 +61,7 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                var response = await favoriteService.DeleteAsync(favoriteId);
-
-                if (response == null)
-                {
-                    return StatusCode(StatusCodes.Status404NotFound);
-                }
+                await favoriteService.DeleteAsync(favoriteId);
 
                 return Ok("The listing has been removed from favorites!");
             }
