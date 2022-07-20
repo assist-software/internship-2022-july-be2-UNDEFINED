@@ -35,14 +35,22 @@ namespace Assist.July._2022.BE2.Application.Services
             await UserRepository.PutAsync(user);
             return user;
         }
-        public async Task Register(RegisterRequest Register)
+        public async Task Register(string Email,string Password)
         {
-            var email = await UserRepository.GetByEmaiAsync(Register.Email);
-            if (email!=null)
-                throw new AppException("Email " + Register.Email + " is already taken");
-            
-            var user = Mapper.Map<User>(Register);
+            var email = await UserRepository.GetByEmaiAsync(Email);
+            if (email != null)
+                throw new AppException("Email " + Email + " is already taken");
+
+            var user = new User();
+            user.Email = Email;
+            user.Password = Password;
+            user.Address = string.Empty;
+            user.FullName = string.Empty;
             user.IsActive = true;
+            user.Role = 0;
+            user.Address = string.Empty;
+            user.Phone = string.Empty;
+            user.Address = string.Empty;
             user.CreatedAt = DateTime.Now;
             user.UpdatedAt = DateTime.Now;
             if (user.Password == String.Empty)

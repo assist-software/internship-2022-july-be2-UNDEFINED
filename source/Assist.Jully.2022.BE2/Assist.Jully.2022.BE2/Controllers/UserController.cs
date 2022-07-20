@@ -40,11 +40,11 @@ namespace Assist.Jully._2022.BE2.Controllers
         }
         
         [HttpPost("Register"),AllowAnonymus]
-        public async Task<IActionResult> Register(RegisterRequest Register)
+        public async Task<IActionResult> Register(string email,string password)
         {
             try
             {
-                await UserService.Register(Register);
+                await UserService.Register(email,password);
 
                 return new OkObjectResult("ok");
             }
@@ -54,7 +54,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
         }
         
-        [HttpPost("Reset/Password")]
+        [HttpPost("Reset/Password"),AllowAnonymus]
         public async Task<IActionResult> ResetPassword(string email)
         {
             try
