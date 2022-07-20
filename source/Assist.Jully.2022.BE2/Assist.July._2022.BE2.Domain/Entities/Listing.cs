@@ -17,6 +17,7 @@
 
         public User? Author { get; set; }
         public Guid ApprovedBy { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]//-------------------------------------Temporary solution------------------------------
         public ICollection<Favorite>? FavoredBy { get; set; }
     }
 }
