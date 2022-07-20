@@ -52,12 +52,12 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return BadRequest("An error has occured");
             }
         }
-        [HttpGet("sort/")]
-        public async Task<ActionResult<List<Listing>>> GetSortedListingsAsync(string? sortOrder, string? locationFilter, string? priceRange, string? searchString,string? categories, string? page, string? pageSize)
+        [HttpGet("sort")]
+        public async Task<ActionResult<List<Listing>>> GetSortedListingsAsync([FromQuery] SortListingDto sortListingDto)
         {
             try
             {
-                var response = await listingService.GetSortedListingsAsync(sortOrder, locationFilter, priceRange, searchString,categories, page, pageSize);
+                var response = await listingService.GetSortedListingsAsync(sortListingDto);
 
                 if (response == null)
                 {
