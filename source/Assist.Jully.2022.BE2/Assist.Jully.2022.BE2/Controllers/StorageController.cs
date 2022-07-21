@@ -21,17 +21,10 @@ namespace Assist.Jully._2022.BE2.Controllers
             return StatusCode(StatusCodes.Status200OK, files);
         }
         [HttpPost(nameof(Upload))]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> Upload([FromBody]string file,string name)
         {
-            BlobResponse? response = await _storage.UploadAsync(file);
-            if (response.Error == true)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
-            }
-            else
-            {
-                return StatusCode(StatusCodes.Status200OK, response);
-            }
+            await _storage.UploadAsync64(file,name);
+            return new OkObjectResult("ok");
         }
         [HttpGet("{filename}")]
         public async Task<IActionResult> Download(string filename)

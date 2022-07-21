@@ -1,6 +1,7 @@
 ﻿using Assist.July._2022.BE2.Application.Dtos.Blob;
 using Assist.July._2022.BE2.Application.Interfaces;
 using Azure;
+using Azure.Core;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
@@ -45,7 +46,6 @@ namespace Assist.July._2022.BE2.Application.Services
             BlobContainerClient container = new BlobContainerClient(_storageConnectionString, _storageContainerName);
             try
             {
-               
                 BlobClient client = container.GetBlobClient(blob.FileName);
                 await using (Stream? data = blob.OpenReadStream())
                 {
@@ -74,12 +74,15 @@ namespace Assist.July._2022.BE2.Application.Services
             return response;
         }
 
-        public async Task UploadAsync64(string file)
+        public async Task UploadAsync64(string file,string name)
         {
             BlobResponse response = new BlobResponse();
             BlobContainerClient container = new BlobContainerClient(_storageConnectionString, _storageContainerName);
-
-
+            byte[] data = Convert.FromBase64String(file);
+            name += ".png";
+            BlobClient client = container.GetBlobClient(name);
+            MemoryStream ms = new MemoryStream(data);
+            await client.UploadAsync(ms);
         }
 
         public async Task<BlobFile> DownloadAsync(string blobFilename)
