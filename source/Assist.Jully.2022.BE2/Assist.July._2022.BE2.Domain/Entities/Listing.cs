@@ -6,7 +6,7 @@
         public string? Title { get; set; }
         public string? Description { get; set; }
         public string? ShortDescription { get; set; }
-        public string? Location { get; set; }
+        public virtual Location Location { get; set; }
         public double? Price { get; set; }
         public byte Status { get; set; }
         public string? Images { get; set; }

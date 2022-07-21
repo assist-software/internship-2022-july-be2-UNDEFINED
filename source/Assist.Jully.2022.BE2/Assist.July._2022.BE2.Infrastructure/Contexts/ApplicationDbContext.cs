@@ -22,6 +22,10 @@ namespace Assist.July._2022.BE2.Infrastructure.Contexts
             modelBuilder.ApplyConfiguration(new ListingConfiguration());
             modelBuilder.ApplyConfiguration(new MessageConfiguration());
             modelBuilder.ApplyConfiguration(new UserActivityConfiguration());
+
+            /*modelBuilder.Entity<Listing>().HasOne(entity => entity.Location)
+                .WithOne(entity => entity.listing)
+                .HasForeignKey<Location>(entity => entity.listingId);*/
         }
 
     }

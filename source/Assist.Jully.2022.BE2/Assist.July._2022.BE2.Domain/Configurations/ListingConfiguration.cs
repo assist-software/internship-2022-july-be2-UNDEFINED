@@ -23,8 +23,9 @@ namespace Assist.July._2022.BE2.Domain.Configurations
                 .IsRequired();
 
             builder
-                .Property(entity => entity.Location)
-                .IsRequired();
+                .HasOne(entity => entity.Location)
+                .WithOne(entity => entity.listing)
+                .HasForeignKey<Location>(entity => entity.listingId);
 
             builder
                 .Property(entity => entity.Price)
