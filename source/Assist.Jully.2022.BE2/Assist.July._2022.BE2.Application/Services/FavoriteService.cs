@@ -50,5 +50,10 @@ namespace Assist.July._2022.BE2.Application.Services
 
             await favoriteRepo.DeleteAsync(dbFavorite);
         }
+
+        public async Task DeleteByUserAndListingIdAsync(Guid userId, Guid listingId)
+        {
+            await favoriteRepo.DeleteByUserAndListingIdAsync(userId, listingId);
+        }
     }
 }

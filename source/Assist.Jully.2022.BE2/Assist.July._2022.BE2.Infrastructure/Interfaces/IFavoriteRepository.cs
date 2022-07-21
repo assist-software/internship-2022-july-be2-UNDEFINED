@@ -6,6 +6,7 @@ namespace Assist.July._2022.BE2.Infrastructure.Interfaces
     {
         Task<IEnumerable<Listing>> GetAllListingsByUserIdAsync(Guid userId);
         Task PostAsync(Favorite favorite);
+        Task DeleteByUserAndListingIdAsync(Guid userId, Guid listingId);
         Task DeleteAsync(Favorite favoriteId);
         Task <Favorite> GetFavoriteByIdAsync(Guid id);
     }
