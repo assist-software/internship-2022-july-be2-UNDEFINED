@@ -41,10 +41,6 @@ namespace Assist.July._2022.BE2.Application.Services
 
             var listings = await listingRepo.GetSortedAsync(sortListingDto.sortOrder, sortListingDto.locationFilter, sortListingDto.priceRange, sortListingDto.searchString, sortListingDto.category, pageNumber, itemsPerPage);
 
-            if (!listings.Any())
-            {
-                throw new KeyNotFoundException("No Listings found");
-            }
 
             return listings;
         }

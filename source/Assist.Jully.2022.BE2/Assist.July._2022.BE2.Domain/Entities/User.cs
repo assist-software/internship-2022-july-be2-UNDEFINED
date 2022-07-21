@@ -19,6 +19,8 @@
         public bool IsActive { get; set; }
 
         public ICollection<Listing>? Listings { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]//-------------------------------------Temporary solution------------------------------
         public ICollection<Favorite>? Favorites { get; set; }
+
     }
 }
