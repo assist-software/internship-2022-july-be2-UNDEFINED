@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
-    [Route("api/[controller]"), ApiController,AuthorizeAtribute]
+    [Route("api/[controller]"), ApiController]
     
     public class UserController : ControllerBase
     {
