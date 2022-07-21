@@ -18,14 +18,16 @@ namespace Assist.July._2022.BE2.Application.Services
         readonly IMapper Mapper;
         private IJwtUtils JwtUtil;
         private IUserRepository UserRepository;
+        private IAzureStorage Azure;
         public UserService(ApplicationDbContext DataBase,IMapper mapper, IMailService mailService
-            , IJwtUtils jwtUtil,IUserRepository UserRepo)
+            , IJwtUtils jwtUtil, IUserRepository UserRepo, IAzureStorage azure)
         {
             applicationDbContext = DataBase;
             Mapper = mapper;
             MailService = mailService;
             JwtUtil = jwtUtil;
             UserRepository = UserRepo;
+            Azure = azure;
         }
 
         public async Task<User> Login(LoginRequest Login)
@@ -62,10 +64,11 @@ namespace Assist.July._2022.BE2.Application.Services
         }
         public async Task<User> GetUser(Guid Id)
         {
+            string SasKey = "?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2022-08-16T17:30:43Z&st=2022-07-20T09:30:43Z&sip=0.0.0.0-255.255.255.255&spr=https&sig=RReu5GnC4EjJqvE63A00A3iK6gLCOJp9Mk%2F6eXHbeQM%3D";
             var user = await UserRepository.GetByIdAsync(Id);
             if (user == null)
                 throw new AppException("User not found");
-
+            user.Photo += SasKey;
             return user;
         }
         public async Task<User> GetUserEmail(string Email)
@@ -96,10 +99,14 @@ namespace Assist.July._2022.BE2.Application.Services
         public async Task UpdateUser(UpdateRequest Update,Guid id)
         {
             var user = await UserRepository.GetByIdAsync(id);
+            
             if (user == null)
                 throw new AppException("User not found");
+           
             Mapper.Map(Update, user);
+            user.Photo = await Azure.UploadAsync64(Update.Photo, user.Id.ToString());
             await UserRepository.PutAsync(user);
+           
         }
        
         public async Task<IEnumerable<User>>GetAll()
