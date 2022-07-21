@@ -71,7 +71,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
         }
 
-        [HttpDelete("{userId},{listingId}")]
+        [HttpDelete("{userId}/{listingId}")]
         public async Task<IActionResult> DeleteListingFromFavorites(Guid userId, Guid listingId)
         {
             try
