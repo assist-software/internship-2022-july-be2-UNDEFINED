@@ -78,7 +78,7 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader();
                       });
 });
-//---------------------------------------------------------------------------------
+
 builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionJobFactory();
@@ -89,13 +89,11 @@ builder.Services.AddQuartz(q =>
         .ForJob(quartzAdminAlertJobKey)
         .WithIdentity("QuartzAdminAlertJobKey-trigger")
         .WithSimpleSchedule(x => x
-            .WithIntervalInMinutes(1)
-            //.WithIntervalInSeconds(3)
+            .WithIntervalInHours(2)
             .RepeatForever()));
 
 });
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
-//------------------------------------------------------------------------------------
 
 var app = builder.Build();
 //if (app.Environment.IsDevelopment())

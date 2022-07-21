@@ -13,7 +13,7 @@ namespace Assist.July._2022.BE2.Application.QuartzJobs
         private List<Listing> listOfPendingListings = new List<Listing>();
         private IListingService listingService;
         private  IMailService mailService;
-        private const string AdminEmailAdress = "enachiuc.marcela@yahoo.com";
+        private const string AdminEmailAdress = "pisicicainii1@gmail.com";
 
         public AdminAlertJob(ILogger<AdminAlertJob> logger, IMailService mailService, IListingService  listingService)
         {
@@ -22,12 +22,12 @@ namespace Assist.July._2022.BE2.Application.QuartzJobs
             this.listingService = listingService;
         }
 
-        async Task SendEmailNotification(Guid id, string email)
+        async Task SendEmailNotification(String listingName, string email)
         {
             MailRequest MailToSend = new MailRequest();
             MailToSend.ToEmail = email;
             MailToSend.Subject = "Validate Listing!";
-            MailToSend.Body = "Validate: " + id;
+            MailToSend.Body = "Validate: " + listingName;
             await mailService.SendEmailAsync(MailToSend);
         }
 
@@ -47,14 +47,12 @@ namespace Assist.July._2022.BE2.Application.QuartzJobs
 
             foreach (var listing in listOfPendingListings)
             {
-                if ((DateTime.Now - listing.CreatedAt).Days >= 1)
+                if ((DateTime.Now - listing.CreatedAt).Days >= 2)
                 {
-                    //Send email to admin
-                    await SendEmailNotification(listing.Id, AdminEmailAdress);
-                    //Console log
+                    await SendEmailNotification(listing.Title, AdminEmailAdress);
+
                     _logger.LogInformation("--------------------------------------An email has been sent: " + DateTime.UtcNow + "For timespan: " + (DateTime.Now - listing.CreatedAt).Days);
                 }
-                Console.WriteLine("---------------------------------------------------------------TIMESPAN: " + (DateTime.Now - listing.CreatedAt).Days);
             }
         }
     }
