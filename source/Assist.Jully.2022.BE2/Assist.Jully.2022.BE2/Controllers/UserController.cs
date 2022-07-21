@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
-    [Route("api/[controller]"), ApiController,AuthorizeAtribute]
+    [Route("api/[controller]"), ApiController]
     
     public class UserController : ControllerBase
     {
@@ -83,7 +83,7 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return new NotFoundObjectResult("User not found");
             }
         }
-        
+      
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(Guid id)
         {
@@ -113,7 +113,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
         }
         
-        [HttpGet]
+        [HttpGet,OnlyAdmins]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -141,5 +141,6 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return new NotFoundObjectResult("User not found");
             }
         }
+ 
     }
 }

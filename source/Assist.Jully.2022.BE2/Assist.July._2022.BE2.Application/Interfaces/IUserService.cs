@@ -1,5 +1,6 @@
 ﻿using Assist.July._2022.BE2.Application.Dtos.UserDtos;
 using Assist.July._2022.BE2.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace Assist.July._2022.BE2.Application.Interfaces
 {
