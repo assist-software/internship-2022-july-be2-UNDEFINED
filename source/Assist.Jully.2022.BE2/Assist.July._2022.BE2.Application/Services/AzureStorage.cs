@@ -46,7 +46,6 @@ namespace Assist.July._2022.BE2.Application.Services
             byte[] data = Convert.FromBase64String(file);
             name += ".PNG";
             BlobClient client = container.GetBlobClient(name);
-            client.Delete();
             MemoryStream ms = new MemoryStream(data);
             var blobHttpHeader = new BlobHttpHeaders { ContentType = "image/jpeg" };
             await client.UploadAsync(ms, new BlobUploadOptions

@@ -56,6 +56,11 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return new BadRequestObjectResult(message.Take);
             }
         }
+        [HttpPost("GoogleRegister"),AllowAnonymus]
+        public async Task<IActionResult> RegisterwithGoogle()
+        {
+            return new OkObjectResult("saas");
+        }
         
         [HttpPost("Reset/Password"),AllowAnonymus]
         public async Task<IActionResult> ResetPassword(string email)
