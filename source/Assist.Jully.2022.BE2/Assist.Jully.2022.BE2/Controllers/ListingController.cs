@@ -25,11 +25,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             {
                 await listingService.AddAsync(request);
 
-                return Ok("Listing Added");
+                return Ok("{ 'message' : 'Listing Added' }");
             }
             catch(Exception)
             {
-                return BadRequest("An error has occured");
+                return BadRequest("{ 'message' : 'An error has occured' }");
             }
         }
 
@@ -49,7 +49,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("An error has occured");
+                return BadRequest("{ 'message' : 'An error has occured' }");
             }
         }
         [HttpGet("sort")]
@@ -68,7 +68,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("An error has occured");
+                return BadRequest("{ 'message' : 'An error has occured' }");
             }
         }
 
@@ -81,16 +81,16 @@ namespace Assist.Jully._2022.BE2.Controllers
 
                 if (response == null)
                 { 
-                    return NotFound(); 
+                    return NotFound("{ 'message' : 'Listing not found' }"); 
                 }
 
                 await applicationDbContext.SaveChangesAsync();
 
-                return new OkObjectResult("Update a listing");
+                return new OkObjectResult("{ 'message' : 'Update a listing' }");
             }
             catch (Exception)
             {
-                return BadRequest("An error has occured");
+                return BadRequest("{ 'message' : 'An error has occured' }");
             }
         }
 
@@ -110,7 +110,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("An error has occured");
+                return BadRequest("{ 'message' : 'An error has occured' }");
             }
         }
 
@@ -126,11 +126,11 @@ namespace Assist.Jully._2022.BE2.Controllers
                     return NotFound(); 
                 }
 
-                return Ok("Listing deleted");
+                return Ok("{ 'message' : 'Listing deleted' }");
             }
             catch (Exception)
             {
-                return BadRequest("An error has occured");
+                return BadRequest("{ 'message' : 'An error has occured' }");
             }
         }
     }
