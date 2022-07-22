@@ -8,5 +8,6 @@ namespace Assist.July._2022.BE2.Infrastructure.Interfaces
         Task DeleteAsync(Guid messageId);
         Task<IEnumerable<Message>> GetAllAsync(Guid listingId);
         Task PostAsync(Message request);
+        Task<IEnumerable<Message>> GetAllByListingReceiverAndSenderId(Guid senderId, Guid receiverId, Guid listingId);
     }
 }
