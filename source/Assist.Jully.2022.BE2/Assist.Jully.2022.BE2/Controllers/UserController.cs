@@ -56,6 +56,21 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return new BadRequestObjectResult(message.Take);
             }
         }
+        [HttpPost("GoogleRegister"),AllowAnonymus]
+        public async Task<IActionResult> RegisterwithGoogle(GoogleDto model)
+        {
+            try
+            {
+                await UserService.RegisterGoogle(model);
+
+                return new OkObjectResult(message.Ok);
+            }
+            catch (AppException ex)
+            {
+                return new BadRequestObjectResult(message.Error);
+
+            }
+        }
         
         [HttpPost("Reset/Password"),AllowAnonymus]
         public async Task<IActionResult> ResetPassword(string email)

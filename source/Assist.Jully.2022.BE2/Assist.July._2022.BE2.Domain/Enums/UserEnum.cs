@@ -8,9 +8,9 @@
     }
     public enum Role
     {
-        DisConnect=0,
-        User=1,
-        Admin=2,
-        Validator=3
+        DisConnect= 0,
+        User= 1,
+        Admin= 2,
+        Validator= 3
     }
 }
