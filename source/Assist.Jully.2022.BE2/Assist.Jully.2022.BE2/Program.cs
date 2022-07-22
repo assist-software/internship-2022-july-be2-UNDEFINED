@@ -11,16 +11,25 @@ using Assist.July._2022.BE2.Infrastructure.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using Quartz;
 
+
+StaticLogger.EnsureInitialized();
 var allowSpecificOrigins = "allowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 var sqlConnectionBuilder = new SqlConnectionStringBuilder(
     builder
     .Configuration
     .GetConnectionString("SqlDBConnectionString"));
-builder.Services.AddControllers();
 
+builder.Services.AddControllers();
+builder.Host.UseSerilog((_, config) =>
+{
+    config.WriteTo.Console()
+    .ReadFrom.Configuration(builder.Configuration);
+    
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -50,9 +59,10 @@ builder.Services.AddSwaggerGen(c =>
     }
     );
 });
+
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlServer(sqlConnectionBuilder.ConnectionString));
-
+builder.Services.Configure<AzureSettings>(builder.Configuration.GetSection("SasKey"));
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddTransient<IMailService,MailService>();
@@ -65,6 +75,7 @@ builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddTransient<IListingService, ListingService>();
 builder.Services.AddTransient<IListingRepository, ListingRepository>();
+builder.Services.AddScoped<IAzureStorage, AzureStorage>();
 
 builder.Services.AddCustomConfiguredAutoMapper();
 builder.Services.AddCors(options =>
@@ -115,3 +126,5 @@ app.UseMiddleware<JwtMiddleware>();
 app.MapControllers();
 
 app.Run();
+
+StaticLogger.EnsureInitialized();
