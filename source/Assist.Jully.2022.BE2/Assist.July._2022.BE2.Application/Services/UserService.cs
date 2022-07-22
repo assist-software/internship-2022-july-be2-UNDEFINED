@@ -8,6 +8,7 @@ using Assist.July._2022.BE2.Application.Dtos.MailDtos;
 using Assist.July._2022.BE2.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using BCrypt.Net;
+using Microsoft.Extensions.Options;
 
 namespace Assist.July._2022.BE2.Application.Services
 {
@@ -19,8 +20,11 @@ namespace Assist.July._2022.BE2.Application.Services
         private IJwtUtils JwtUtil;
         private IUserRepository UserRepository;
         private IAzureStorage Azure;
+        readonly AzureSettings AzureSettings;
+
         public UserService(ApplicationDbContext DataBase,IMapper mapper, IMailService mailService
-            , IJwtUtils jwtUtil, IUserRepository UserRepo, IAzureStorage azure)
+            , IJwtUtils jwtUtil, IUserRepository UserRepo, IAzureStorage azure,
+            IOptions<AzureSettings>azureSettings)
         {
             applicationDbContext = DataBase;
             Mapper = mapper;
@@ -28,6 +32,7 @@ namespace Assist.July._2022.BE2.Application.Services
             JwtUtil = jwtUtil;
             UserRepository = UserRepo;
             Azure = azure;
+            AzureSettings = azureSettings.Value;
         }
 
         public async Task<User> Login(LoginRequest Login)
@@ -62,16 +67,15 @@ namespace Assist.July._2022.BE2.Application.Services
             await UserRepository.AddAsync(user);
             await UserRepository.PutAsync(user);
         }
-        public async Task<User> getUser(Guid Id)
+        public async Task<User> GetUser(Guid Id)
         {
-            string SasKey = "?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2022-08-16T17:30:43Z&st=2022-07-20T09:30:43Z&sip=0.0.0.0-255.255.255.255&spr=https&sig=RReu5GnC4EjJqvE63A00A3iK6gLCOJp9Mk%2F6eXHbeQM%3D";
             var user = await UserRepository.GetByIdAsync(Id);
             if (user == null)
                 throw new AppException("User not found");
-            user.Photo += SasKey;
+            user.Photo +=AzureSettings.Key;
             return user;
         }
-        public async Task<User> getUserEmail(string Email)
+        public async Task<User> GetUserEmail(string Email)
         {
             var user = await UserRepository.GetByEmaiAsync(Email);
             if (user == null)
@@ -79,7 +83,7 @@ namespace Assist.July._2022.BE2.Application.Services
 
             return user;
         }
-        public async Task resetPassword(string Email)
+        public async Task ResetPassword(string Email)
         {
             var user =await UserRepository.GetByEmaiAsync(Email);
             if (user == null)
@@ -94,13 +98,12 @@ namespace Assist.July._2022.BE2.Application.Services
             await MailService.SendEmailAsync(MailToSend);
         }
 
-        public async Task updateUser(UpdateRequest Update,Guid id)
+        public async Task UpdateUser(UpdateRequest Update,Guid id)
         {
             var user = await UserRepository.GetByIdAsync(id);
             
             if (user == null)
                 throw new AppException("User not found");
-           
             Mapper.Map(Update, user);
             user.Photo = await Azure.UploadAsync64(Update.Photo, user.Id.ToString());
             if (!string.IsNullOrEmpty(Update.Password))
@@ -109,12 +112,12 @@ namespace Assist.July._2022.BE2.Application.Services
            
         }
        
-        public async Task<IEnumerable<User>>getAll()
+        public async Task<IEnumerable<User>>GetAll()
         {
             var user = await UserRepository.GetAllAsync();
             return user;
         }
-        public async Task deleteUser(Guid Id)
+        public async Task DeleteUser(Guid Id)
         {
             var user = await UserRepository.GetByIdAsync(Id);
             if (user == null)

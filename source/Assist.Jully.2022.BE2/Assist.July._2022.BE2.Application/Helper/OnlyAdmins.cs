@@ -10,7 +10,7 @@ namespace Assist.July._2022.BE2.Application.Helper
         public async void OnAuthorization(AuthorizationFilterContext context)
         {
             var user = (User)context.HttpContext.Items["User"];
-            if(user.Role!=1)
+            if(((int)user.Role)!=1)
                context.Result= new JsonResult(new { Message = "Unauthorized" });
         }
     }

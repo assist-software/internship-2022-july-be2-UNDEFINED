@@ -62,7 +62,7 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                await UserService.resetPassword(email);
+                await UserService.ResetPassword(email);
 
                 return new OkObjectResult(message.Ok);
             }
@@ -77,7 +77,7 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                await UserService.updateUser(Update,id);
+                await UserService.UpdateUser(Update,id);
 
                 return new OkObjectResult(message.Ok);
             }
@@ -92,7 +92,7 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                var user = await UserService.getUser(id);
+                var user = await UserService.GetUser(id);
 
                 return new OkObjectResult(user);
             }
@@ -106,7 +106,7 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                var user = await UserService.getUserEmail(Email);
+                var user = await UserService.GetUserEmail(Email);
 
                 return new OkObjectResult(user);
             }
@@ -121,7 +121,7 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                var users = await UserService.getAll();
+                var users = await UserService.GetAll();
                 return new OkObjectResult(users);
             }
             catch(AppException ex)
@@ -135,7 +135,7 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                await UserService.deleteUser(id);
+                await UserService.DeleteUser(id);
 
                 return new OkObjectResult(message.Ok);
             }

@@ -2,6 +2,7 @@
 using Assist.July._2022.BE2.Application.Helper;
 using Assist.July._2022.BE2.Application.Interfaces;
 using Assist.July._2022.BE2.Domain.Entities;
+using Assist.July._2022.BE2.Domain.Enums;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -54,7 +55,7 @@ namespace Assist.July._2022.BE2.Application.Utils
             var userToken = new UserToken();
             userToken.id= Guid.Parse(JwtToken.Claims.First(x => x.Type == "id").Value);
             userToken.Email = JwtToken.Claims.First(x => x.Type == "Email").Value;
-            userToken.Role = byte.Parse(JwtToken.Claims.First(x => x.Type == "Role").Value);
+            userToken.Role = (Role)int.Parse(JwtToken.Claims.First(x => x.Type == "Role").Value);
             return userToken;
         }
     }

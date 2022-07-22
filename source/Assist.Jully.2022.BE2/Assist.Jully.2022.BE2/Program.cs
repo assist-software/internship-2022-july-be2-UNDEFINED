@@ -59,7 +59,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlServer(sqlConnectionBuilder.ConnectionString));
-
+builder.Services.Configure<AzureSettings>(builder.Configuration.GetSection("SasKey"));
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddTransient<IMailService,MailService>();

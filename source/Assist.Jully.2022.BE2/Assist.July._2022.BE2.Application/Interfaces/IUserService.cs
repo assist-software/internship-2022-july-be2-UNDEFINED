@@ -10,16 +10,16 @@ namespace Assist.July._2022.BE2.Application.Interfaces
 
         Task Register(string Email, string Password);
 
-        Task<User> getUser(Guid Id);
+        Task<User> GetUser(Guid Id);
 
-        Task<User> getUserEmail(string Email);
+        Task<User> GetUserEmail(string Email);
 
-        Task resetPassword(string Email);
+        Task ResetPassword(string Email);
 
-        Task updateUser(UpdateRequest Update,Guid id);
+        Task UpdateUser(UpdateRequest Update,Guid id);
 
-        Task< IEnumerable<User>> getAll();
+        Task< IEnumerable<User>> GetAll();
 
-        Task deleteUser(Guid Id);
+        Task DeleteUser(Guid Id);
     }
 }
