@@ -128,7 +128,6 @@ namespace Assist.July._2022.BE2.Application.Services
             return (s.Length%4==0)&&Regex.IsMatch(s, @"^[a-zA-Z0-9+/]*={0,3}$", RegexOptions.None);
         }
 
-            return new BlobResponse { Error = false, Status = $"File: {blobFilename} has been successfully deleted." };
-        }
+         
     }
 }
