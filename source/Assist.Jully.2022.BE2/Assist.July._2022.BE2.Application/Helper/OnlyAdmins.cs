@@ -1,4 +1,5 @@
 ﻿using Assist.July._2022.BE2.Domain.Entities;
+using Assist.July._2022.BE2.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -10,7 +11,8 @@ namespace Assist.July._2022.BE2.Application.Helper
         public async void OnAuthorization(AuthorizationFilterContext context)
         {
             var user = (User)context.HttpContext.Items["User"];
-            if(((int)user.Role) != 1)
+            Role AdminRole = Role.Admin;
+            if(user.Role!=AdminRole)
                context.Result= new JsonResult(new { Message = "Unauthorized" });
         }
     }

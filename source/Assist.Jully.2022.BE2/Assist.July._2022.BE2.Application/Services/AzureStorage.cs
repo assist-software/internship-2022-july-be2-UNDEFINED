@@ -1,8 +1,10 @@
 ﻿using Assist.July._2022.BE2.Application.Dtos.Blob;
 using Assist.July._2022.BE2.Application.Interfaces;
 using Azure;
+using Azure.Core;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 

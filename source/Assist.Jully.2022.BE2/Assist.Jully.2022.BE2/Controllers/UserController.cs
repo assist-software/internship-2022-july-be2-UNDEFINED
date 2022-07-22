@@ -6,6 +6,7 @@ using Assist.July._2022.BE2.Infrastructure.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Assist.July._2022.BE2.Application.Dtos.InfoDtos;
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
@@ -16,12 +17,14 @@ namespace Assist.Jully._2022.BE2.Controllers
         private IUserService UserService;
         private IMapper Mapper;
         private readonly AppSettings AppSetting;
+        private InfoMessegeDto message;
         public UserController(IUserService userService, IMapper mapper,
             IOptions<AppSettings>appsettings)
         {
             UserService = userService;
             Mapper = mapper;
             AppSetting = appsettings.Value;
+            message = new InfoMessegeDto();
         }
 
         [HttpPost("Authenticate"),AllowAnonymus]
@@ -35,7 +38,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch(AppException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new BadRequestObjectResult(message.Error);
             }
         }
         
@@ -46,11 +49,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             {
                 await UserService.Register(email,password);
 
-                return new OkObjectResult("ok");
+                return new OkObjectResult(message.Ok);
             }
             catch (AppException ex)
             {
-                return new BadRequestObjectResult("An error has occured");
+                return new BadRequestObjectResult(message.Take);
             }
         }
         
@@ -61,11 +64,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             {
                 await UserService.ResetPassword(email);
 
-                return new OkObjectResult("ok");
+                return new OkObjectResult(message.Ok);
             }
             catch(AppException ex)
             {
-                return new BadRequestObjectResult("An error has occured");
+                return new BadRequestObjectResult(message.ErrorEmail);
             }
         }
         
@@ -76,11 +79,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             {
                 await UserService.UpdateUser(Update,id);
 
-                return new OkObjectResult("ok");
+                return new OkObjectResult(message.Ok);
             }
             catch (AppException ex)
             {
-                return new NotFoundObjectResult("User not found");
+                return new NotFoundObjectResult(message.Error);
             }
         }
       
@@ -95,7 +98,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("User not found");
+                return new NotFoundObjectResult(message.Error);
             }
         }
         [HttpGet("search/{Email}")]
@@ -109,7 +112,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("User not found");
+                return new NotFoundObjectResult(message.Error);
             }
         }
         
@@ -123,7 +126,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("Database is empty");
+                return new NotFoundObjectResult(message.ErrorEmpty);
             }
         }
         
@@ -134,11 +137,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             {
                 await UserService.DeleteUser(id);
 
-                return new OkObjectResult("ok");
+                return new OkObjectResult(message.Ok);
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("User not found");
+                return new NotFoundObjectResult(message.Error);
             }
         }
  

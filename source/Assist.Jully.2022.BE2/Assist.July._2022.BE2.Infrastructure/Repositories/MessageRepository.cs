@@ -58,5 +58,10 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
 
             await applicationDbContext.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Message>> GetAllByListingReceiverAndSenderId(Guid senderId, Guid receiverId, Guid listingId)
+        {
+            return await applicationDbContext.Messages.Where(x => x.ListingId == listingId && (x.SenderId == senderId || x.SenderId == receiverId) && (x.ReceiverId == receiverId || x.ReceiverId == senderId)).ToListAsync();
+        }
     }
 }

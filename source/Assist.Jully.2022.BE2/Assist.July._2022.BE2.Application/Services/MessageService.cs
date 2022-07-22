@@ -52,5 +52,19 @@ namespace Assist.July._2022.BE2.Application.Services
 
             await messageRepository.PostAsync(newMessage);
         }
+
+        public async Task<IEnumerable<Message>> GetAllByListingReceiverAndSenderId(Guid senderId, Guid receiverId, Guid listingId)
+        {
+            var dbMessages = await messageRepository.GetAllByListingReceiverAndSenderId(senderId, receiverId, listingId);
+
+            if (!dbMessages.Any())
+            {
+                throw new KeyNotFoundException("Not found");
+            }
+            else
+            {
+                return dbMessages;
+            }
+        }
     }
 }
