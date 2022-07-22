@@ -52,6 +52,25 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return BadRequest("An error has occured");
             }
         }
+        [HttpGet("sort")]
+        public async Task<ActionResult<List<Listing>>> GetSortedListingsAsync([FromQuery] SortListingDto sortListingDto)
+        {
+            try
+            {
+                var response = await listingService.GetSortedListingsAsync(sortListingDto);
+
+                if (response == null)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return BadRequest("An error has occured");
+            }
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateListing([FromBody]PostListingRequestDto request, Guid id)
