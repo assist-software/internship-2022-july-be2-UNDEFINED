@@ -1,4 +1,6 @@
-﻿namespace Assist.July._2022.BE2.Domain.Entities
+﻿using Assist.July._2022.BE2.Domain.Enums;
+
+namespace Assist.July._2022.BE2.Domain.Entities
 {
     public record UserActivity
     {
@@ -8,7 +10,7 @@
         public string? Location { get; set; }
         public DateTime ConnectionDate { get; set; }
 
-        public bool Status { get; set; }
+        public UserActivityStatus Status { get; set; }
 
         public ICollection<User>? Users { get; set; }
     }

@@ -38,7 +38,7 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
                 return await applicationDbContext.Listings
                     .Where(x => x.Location.Contains(locationFilter ?? x.Location))
                     .Where(x => priceRange != null ? x.Price >= Int32.Parse(range[0]) && x.Price <= Int32.Parse(range[1]) : x.Price == x.Price)
-                    .Where(x => x.Category == (category ?? x.Category))
+                    //.Where(x => x.Category == (category ?? x.Category))
                     .OrderBy(x => x.Price)
                     .Skip(pageNumber == 1 ? 0 : (pageNumber - 1) * pageSize)
                     .Take(pageSize)
@@ -50,7 +50,7 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
                 return await applicationDbContext.Listings
                     .Where(x => x.Location.Contains(locationFilter ?? x.Location))
                     .Where(x => priceRange != null ? x.Price >= Int32.Parse(range[0]) && x.Price <= Int32.Parse(range[1]) : x.Price == x.Price)
-                    .Where(x => x.Category == (category ?? x.Category))
+                    //.Where(x => x.Category == (category ?? x.Category))
                     .OrderByDescending(x => x.Price)
                     .Skip(pageNumber == 1 ? 0 : (pageNumber - 1) * pageSize)
                     .Take(pageSize)
@@ -62,7 +62,7 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
                 return await applicationDbContext.Listings
                     .Where(x => x.Location.Contains(locationFilter ?? x.Location))
                     .Where(x => priceRange != null ? x.Price >= Int32.Parse(range[0]) && x.Price <= Int32.Parse(range[1]) : x.Price == x.Price)
-                    .Where(x => x.Category == (category ?? x.Category))
+                    //.Where(x => x.Category == (category ?? x.Category))
                     .OrderBy(x => x.ViewCounter)
                     .Skip(pageNumber == 1 ? 0 : (pageNumber - 1) * pageSize)
                     .Take(pageSize)
@@ -72,7 +72,7 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
             return await applicationDbContext.Listings
                 .Where(x => x.Location.Contains(locationFilter ?? x.Location))
                 .Where(x => priceRange != null ? x.Price >= Int32.Parse(range[0]) && x.Price <= Int32.Parse(range[1]) : x.Price == x.Price)
-                .Where(x => x.Category == (category ?? x.Category))
+                //.Where(x => x.Category == (category ?? x.Category))
                 .Skip(pageNumber == 1 ? 0 : (pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

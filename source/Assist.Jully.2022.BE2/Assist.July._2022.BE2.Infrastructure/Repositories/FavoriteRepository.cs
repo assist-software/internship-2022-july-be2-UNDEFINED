@@ -43,6 +43,19 @@ namespace Assist.July._2022.BE2.Infrastructure.Repositories
             await applicationDbContext.SaveChangesAsync();
         }
 
+        public async Task DeleteByUserAndListingIdAsync(Guid userId, Guid listingId)
+        {
+            var favoritesList = await applicationDbContext.Favorites.Include(favorite => favorite.Users).Include(favorite => favorite.Listings).ToListAsync();
+            foreach (var variable in favoritesList)
+            {
+                if(variable.Listings.Id == listingId && variable.Users.Id == userId)
+                {
+                    applicationDbContext.Favorites.Remove(variable);
+                }
+            }
+            await applicationDbContext.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(Favorite favoriteId)
         {
             applicationDbContext.Favorites.Remove(favoriteId);

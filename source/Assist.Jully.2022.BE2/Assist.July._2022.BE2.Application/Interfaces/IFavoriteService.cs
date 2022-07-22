@@ -8,5 +8,6 @@ namespace Assist.July._2022.BE2.Application.Interfaces
         Task<FavoriteDto> PostAsync(FavoriteDto request);
         Task <IEnumerable<Listing>>GetAsync(Guid userId);
         Task DeleteAsync(Guid id);
+        Task DeleteByUserAndListingIdAsync(Guid userId, Guid listingId);
     }
 }

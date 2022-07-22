@@ -43,7 +43,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             {
                 var response = await favoriteService.GetAsync(userId);
 
-                if(response == null)
+                if (response == null)
                 {
                     return StatusCode(StatusCodes.Status404NotFound);
                 }
@@ -51,7 +51,7 @@ namespace Assist.Jully._2022.BE2.Controllers
                 return Ok(response);
             }
             catch (Exception)
-            { 
+            {
                 return BadRequest("An error has occured");
             }
         }
@@ -62,6 +62,21 @@ namespace Assist.Jully._2022.BE2.Controllers
             try
             {
                 await favoriteService.DeleteAsync(favoriteId);
+
+                return Ok("The listing has been removed from favorites!");
+            }
+            catch (Exception)
+            {
+                return BadRequest("An error has occured");
+            }
+        }
+
+        [HttpDelete("{userId}/{listingId}")]
+        public async Task<IActionResult> DeleteListingFromFavorites(Guid userId, Guid listingId)
+        {
+            try
+            {
+                await favoriteService.DeleteByUserAndListingIdAsync(userId, listingId);
 
                 return Ok("The listing has been removed from favorites!");
             }
