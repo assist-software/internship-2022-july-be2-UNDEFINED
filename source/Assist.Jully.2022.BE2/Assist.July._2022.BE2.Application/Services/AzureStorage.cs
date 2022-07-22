@@ -7,6 +7,7 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Text.RegularExpressions;
 
 namespace Assist.July._2022.BE2.Application.Services
 {
@@ -41,17 +42,27 @@ namespace Assist.July._2022.BE2.Application.Services
         }
         public async Task<string> UploadAsync64(string file,string name)
         {
+            var blobHttpHeader=new BlobHttpHeaders();
             BlobResponse response = new BlobResponse();
             BlobContainerClient container = new BlobContainerClient(_storageConnectionString, _storageContainerName);
             if(file.Contains("png")||file.Contains("jpg"))
-                file=file.Remove(0,22);
+            {
+                file = file.Remove(0, 22);
+                name += ".PNG";
+                blobHttpHeader = new BlobHttpHeaders { ContentType = "image/jpg" };
+            }
             if (file.Contains("jpeg"))
-                file=file.Remove(0, 23);
+            {
+                file = file.Remove(0, 27);
+                name += ".jpeg";
+                blobHttpHeader = new BlobHttpHeaders { ContentType = "image/jpeg" };
+            }
+            if (isbase64(file) == false)
+                return null;
             byte[] data = Convert.FromBase64String(file);
-            name += ".PNG";
             BlobClient client = container.GetBlobClient(name);
             MemoryStream ms = new MemoryStream(data);
-            var blobHttpHeader = new BlobHttpHeaders { ContentType = "image/jpeg" };
+            
             await client.UploadAsync(ms, new BlobUploadOptions
             { HttpHeaders = blobHttpHeader });
             string link=client.Uri.Authority;
@@ -98,5 +109,11 @@ namespace Assist.July._2022.BE2.Application.Services
             }
             return new BlobResponse { Error = false, Status = $"File: {blobFilename} has been successfully deleted." };
         }
+        public static bool isbase64(string s)
+        {
+            s = s.Trim();
+            return (s.Length%4==0)&&Regex.IsMatch(s, @"^[a-zA-Z0-9+/]*={0,3}$", RegexOptions.None);
+        }
+
     }
 }

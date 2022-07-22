@@ -17,9 +17,11 @@ namespace Assist.July._2022.BE2.Application.Helper
                     if (prop == null) return false;
                     if (prop.GetType() == typeof(string)
                     && string.IsNullOrEmpty((string)prop)) return false;
+                    if (prop == "string") return false;
                     return true;
                 }
             ));
+            CreateMap<GoogleDto, User>();
         }
     }
 }

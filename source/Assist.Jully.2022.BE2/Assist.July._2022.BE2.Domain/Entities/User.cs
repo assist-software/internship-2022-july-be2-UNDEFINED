@@ -20,6 +20,7 @@ namespace Assist.July._2022.BE2.Domain.Entities
         public DateTime UpdatedAt { get; set; }
         public bool IsActive { get; set; }
         
+        public bool Google { get; set; }
 
         public ICollection<Listing>? Listings { get; set; }
         public ICollection<Favorite>? Favorites { get; set; }

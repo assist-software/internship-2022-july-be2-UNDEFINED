@@ -21,7 +21,6 @@ namespace Assist.July._2022.BE2.Application.Services
         private IUserRepository UserRepository;
         private IAzureStorage Azure;
         readonly AzureSettings AzureSettings;
-
         public UserService(ApplicationDbContext DataBase,IMapper mapper, IMailService mailService
             , IJwtUtils jwtUtil, IUserRepository UserRepo, IAzureStorage azure,
             IOptions<AzureSettings>azureSettings)
@@ -38,10 +37,19 @@ namespace Assist.July._2022.BE2.Application.Services
         public async Task<User> Login(LoginRequest Login)
         {
             var user = await UserRepository.GetByEmaiAsync(Login.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(Login.Password,user.Password))
-                throw new AppException("Username or password is incorrect");
-            user.Token = JwtUtil.GenerateToken(user);
-            await UserRepository.PutAsync(user);
+            if (user.Google == false && user != null)
+            {
+                if (!BCrypt.Net.BCrypt.Verify(Login.Password, user.Password))
+                    throw new AppException("password is incorrect");
+            }
+            else if (user == null)
+                throw new AppException("username incorrect");
+            else
+            {
+                user.Token = JwtUtil.GenerateToken(user);
+                await UserRepository.PutAsync(user);
+               
+            }
             return user;
         }
         public async Task Register(string Email,string Password)
@@ -56,7 +64,7 @@ namespace Assist.July._2022.BE2.Application.Services
             user.Address = string.Empty;
             user.FullName = string.Empty;
             user.IsActive = true;
-            user.Role = 0;
+            user.Role = Domain.Enums.Role.User;
             user.Address = string.Empty;
             user.Phone = string.Empty;
             user.Address = string.Empty;
@@ -64,6 +72,21 @@ namespace Assist.July._2022.BE2.Application.Services
             user.UpdatedAt = DateTime.Now;
             if (user.Password == String.Empty)
                 throw new AppException("Password Required");
+            await UserRepository.AddAsync(user);
+            await UserRepository.PutAsync(user);
+        }
+        public async Task RegisterGoogle(GoogleDto Model)
+        {
+            var user = new User();
+            Mapper.Map(Model, user);
+            user.Role = Domain.Enums.Role.User;
+            user.Password = BCrypt.Net.BCrypt.HashPassword(CreateNewPassword());
+            user.CreatedAt = DateTime.Now;
+            user.UpdatedAt = DateTime.Now;
+            user.Google = true;
+            user.Address = string.Empty;
+            user.Phone = string.Empty;
+            user.Address = string.Empty;
             await UserRepository.AddAsync(user);
             await UserRepository.PutAsync(user);
         }

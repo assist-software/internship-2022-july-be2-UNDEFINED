@@ -57,9 +57,18 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
         }
         [HttpPost("GoogleRegister"),AllowAnonymus]
-        public async Task<IActionResult> RegisterwithGoogle()
+        public async Task<IActionResult> RegisterwithGoogle(GoogleDto model)
         {
-            return new OkObjectResult("saas");
+            try
+            {
+                await UserService.RegisterGoogle(model);
+
+                return new OkObjectResult(message.Ok);
+            }
+            catch (AppException ex)
+            {
+                return new BadRequestObjectResult(message.Error);
+            }
         }
         
         [HttpPost("Reset/Password"),AllowAnonymus]
