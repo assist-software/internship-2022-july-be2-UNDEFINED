@@ -87,6 +87,7 @@ namespace Assist.July._2022.BE2.Application.Services
             user.Address = string.Empty;
             user.Phone = string.Empty;
             user.Address = string.Empty;
+
             await UserRepository.AddAsync(user);
             await UserRepository.PutAsync(user);
         }
@@ -96,6 +97,7 @@ namespace Assist.July._2022.BE2.Application.Services
             if (user == null)
                 throw new AppException("User not found");
             user.Photo +=AzureSettings.Key;
+
             return user;
         }
         public async Task<User> GetUserEmail(string Email)

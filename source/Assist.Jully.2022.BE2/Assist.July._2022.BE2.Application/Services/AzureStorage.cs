@@ -38,6 +38,7 @@ namespace Assist.July._2022.BE2.Application.Services
                     ContentType = file.Properties.ContentType
                 });
             }
+
             return files;
         }
         public async Task<string> UploadAsync64(string file,string name)
@@ -45,20 +46,31 @@ namespace Assist.July._2022.BE2.Application.Services
             var blobHttpHeader=new BlobHttpHeaders();
             BlobResponse response = new BlobResponse();
             BlobContainerClient container = new BlobContainerClient(_storageConnectionString, _storageContainerName);
-            if(file.Contains("png")||file.Contains("jpg"))
+            
+            if(file.Contains("png"))
             {
                 file = file.Remove(0, 22);
                 name += ".PNG";
-                blobHttpHeader = new BlobHttpHeaders { ContentType = "image/jpg" };
+                blobHttpHeader = new BlobHttpHeaders { ContentType = "image/png" };
             }
+
+            if (file.Contains("jpg"))
+            {
+                file = file.Remove(0, 22);
+                name += "jpg";
+                blobHttpHeader = new BlobHttpHeaders { ContentType = "image/png" };
+            }
+
             if (file.Contains("jpeg"))
             {
                 file = file.Remove(0, 27);
                 name += ".jpeg";
                 blobHttpHeader = new BlobHttpHeaders { ContentType = "image/jpeg" };
             }
+           
             if (isbase64(file) == false)
                 return null;
+
             byte[] data = Convert.FromBase64String(file);
             BlobClient client = container.GetBlobClient(name);
             MemoryStream ms = new MemoryStream(data);
@@ -67,6 +79,7 @@ namespace Assist.July._2022.BE2.Application.Services
             { HttpHeaders = blobHttpHeader });
             string link=client.Uri.Authority;
             link += client.Uri.LocalPath;
+
             return link;
         }
 
@@ -91,6 +104,7 @@ namespace Assist.July._2022.BE2.Application.Services
             {
                 _logger.LogError($"File {blobFilename} was not found.");
             }
+
             return null;
         }
         public async Task<BlobResponse> DeleteAsync(string blobFilename)
@@ -107,11 +121,13 @@ namespace Assist.July._2022.BE2.Application.Services
                 _logger.LogError($"File {blobFilename} was not found.");
                 return new BlobResponse { Error = true, Status = $"File with name {blobFilename} not found." };
             }
+
             return new BlobResponse { Error = false, Status = $"File: {blobFilename} has been successfully deleted." };
         }
         public static bool isbase64(string s)
         {
             s = s.Trim();
+
             return (s.Length%4==0)&&Regex.IsMatch(s, @"^[a-zA-Z0-9+/]*={0,3}$", RegexOptions.None);
         }
 

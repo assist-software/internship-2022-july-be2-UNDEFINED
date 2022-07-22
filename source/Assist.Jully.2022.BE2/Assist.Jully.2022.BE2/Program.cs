@@ -69,7 +69,6 @@ builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddTransient<IListingService, ListingService>();
 builder.Services.AddTransient<IListingRepository, ListingRepository>();
 builder.Services.AddScoped<IAzureStorage, AzureStorage>();
-
 builder.Services.AddCustomConfiguredAutoMapper();
 builder.Services.AddCors(options =>
 {
