@@ -27,7 +27,7 @@ namespace Assist.July._2022.BE2.Application.Services
         public async Task AddAsync(PostListingRequestDto request)
         {
             Listing newListing = mapper.Map<Listing>(request);
-
+            newListing.Images = await azure.UploadAsync64(request.Images, newListing.Id.ToString());
             //if (response.Error == true)
             //{
             //    throw new KeyNotFoundException("Eroare la blob");
@@ -59,7 +59,6 @@ namespace Assist.July._2022.BE2.Application.Services
         public async Task<Listing> PutListingAsync(PostListingRequestDto request, Guid id)
         {
             var dbListing = await listingRepo.GetByIdAsync(id);
-            dbListing.Images = await azure.UploadAsync64(request.Images, dbListing.Id.ToString());
 
             if (dbListing == null)
             {
@@ -67,6 +66,7 @@ namespace Assist.July._2022.BE2.Application.Services
             }
 
             mapper.Map(request, dbListing);
+            dbListing.Images = await azure.UploadAsync64(request.Images, dbListing.Id.ToString());
             dbListing.UpdatedAt = DateTime.Now;
             await listingRepo.PutAsync(dbListing);
 
