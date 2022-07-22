@@ -38,7 +38,7 @@ namespace Assist.July._2022.BE2.Application.Services
         public async Task<User> Login(LoginRequest Login)
         {
             var user = await UserRepository.GetByEmaiAsync(Login.Email);
-            if (user == null || user.Password != Login.Password)
+            if (user == null || !BCrypt.Net.BCrypt.Verify(Login.Password,user.Password))
                 throw new AppException("Username or password is incorrect");
             user.Token = JwtUtil.GenerateToken(user);
             await UserRepository.PutAsync(user);

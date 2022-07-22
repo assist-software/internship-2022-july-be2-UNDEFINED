@@ -43,6 +43,8 @@ namespace Assist.July._2022.BE2.Application.Services
         {
             BlobResponse response = new BlobResponse();
             BlobContainerClient container = new BlobContainerClient(_storageConnectionString, _storageContainerName);
+            if (file.Contains("png"))
+                file.Remove(0,22);
             byte[] data = Convert.FromBase64String(file);
             name += ".PNG";
             BlobClient client = container.GetBlobClient(name);
