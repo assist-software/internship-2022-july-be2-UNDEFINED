@@ -1,13 +1,13 @@
 ﻿using Assist.July._2022.BE2.Domain.Entities;
-using Assist.July._2022.BE2.Application.Dtos.MessageDtos;
-namespace Assist.July._2022.BE2.Application.Interfaces
+
+namespace Assist.July._2022.BE2.Infrastructure.Interfaces
 {
-    public interface IMessageService
+    public interface IMessageRepository
     {
-        Task PostAsync(PostMessageDto request);
-        Task<IEnumerable<Message>> GetAllAsync(Guid listingId);
         Task DeleteAllAsync(Guid listingId);
         Task DeleteAsync(Guid messageId);
+        Task<IEnumerable<Message>> GetAllAsync(Guid listingId);
+        Task PostAsync(Message request);
         Task<IEnumerable<Message>> GetAllByListingReceiverAndSenderId(Guid senderId, Guid receiverId, Guid listingId);
     }
 }

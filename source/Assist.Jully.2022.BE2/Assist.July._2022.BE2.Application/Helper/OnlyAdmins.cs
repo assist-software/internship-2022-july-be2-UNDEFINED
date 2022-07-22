@@ -12,7 +12,6 @@ namespace Assist.July._2022.BE2.Application.Helper
         {
             var user = (User)context.HttpContext.Items["User"];
             Role AdminRole = Role.Admin;
-
             if(user.Role!=AdminRole)
                context.Result= new JsonResult(new { Message = "Unauthorized" });
         }

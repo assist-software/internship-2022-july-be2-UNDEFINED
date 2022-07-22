@@ -3,6 +3,7 @@ using Assist.July._2022.BE2.Application.Interfaces;
 using Assist.July._2022.BE2.Application.MiddleWare;
 using Assist.July._2022.BE2.Application.Services;
 using Assist.July._2022.BE2.Application.Utils;
+using Assist.July._2022.BE2.Application.QuartzJobs;
 using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
 using Assist.July._2022.BE2.Infrastructure.Interfaces;
@@ -11,7 +12,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
-
+using Quartz;
 StaticLogger.EnsureInitialized();
 var allowSpecificOrigins = "allowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +66,10 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 builder.Services.AddTransient<IMailService,MailService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddTransient<IListingService, ListingService>();
 builder.Services.AddTransient<IListingRepository, ListingRepository>();
@@ -81,6 +86,22 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader();
                       });
 });
+
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+
+    var quartzAdminAlertJobKey = new JobKey("QuartzAdminAlertJobKey");
+    q.AddJob<AdminAlertJob>(opts => opts.WithIdentity(quartzAdminAlertJobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(quartzAdminAlertJobKey)
+        .WithIdentity("QuartzAdminAlertJobKey-trigger")
+        .WithSimpleSchedule(x => x
+            .WithIntervalInHours(2)
+            .RepeatForever()));
+
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 var app = builder.Build();
 //if (app.Environment.IsDevelopment())

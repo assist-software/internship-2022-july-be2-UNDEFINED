@@ -21,6 +21,8 @@ namespace Assist.July._2022.BE2.Domain.Entities
         public bool IsActive { get; set; }
         public bool Google { get; set; }
         public ICollection<Listing>? Listings { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]//-------------------------------------Temporary solution------------------------------
         public ICollection<Favorite>? Favorites { get; set; }
+
     }
 }

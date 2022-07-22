@@ -45,6 +45,21 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
         }
 
+        [HttpGet("{senderId}/{receiverId}/{listingId}")]
+        public async Task<IActionResult> GetAllByListingReceiverAndSenderId(Guid senderId, Guid receiverId, Guid listingId)
+        {
+            try
+            {
+                var listingConversation = await messageService.GetAllByListingReceiverAndSenderId(senderId, receiverId, listingId);
+
+                return new OkObjectResult(listingConversation);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
         [HttpDelete("deleteAll/{listingId}")]
         public IActionResult DeleteAllMessages(Guid listingId)
         {

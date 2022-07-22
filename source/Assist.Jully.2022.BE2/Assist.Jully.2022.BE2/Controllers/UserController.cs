@@ -68,6 +68,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             catch (AppException ex)
             {
                 return new BadRequestObjectResult(message.Error);
+
             }
         }
         

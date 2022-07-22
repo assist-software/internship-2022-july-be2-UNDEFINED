@@ -38,11 +38,11 @@ namespace Assist.July._2022.BE2.Application.Services
                     ContentType = file.Properties.ContentType
                 });
             }
-
             return files;
         }
         public async Task<string> UploadAsync64(string file,string name)
         {
+        
             var blobHttpHeader=new BlobHttpHeaders();
             BlobResponse response = new BlobResponse();
             BlobContainerClient container = new BlobContainerClient(_storageConnectionString, _storageContainerName);
@@ -74,12 +74,10 @@ namespace Assist.July._2022.BE2.Application.Services
             byte[] data = Convert.FromBase64String(file);
             BlobClient client = container.GetBlobClient(name);
             MemoryStream ms = new MemoryStream(data);
-            
             await client.UploadAsync(ms, new BlobUploadOptions
             { HttpHeaders = blobHttpHeader });
             string link=client.Uri.Authority;
             link += client.Uri.LocalPath;
-
             return link;
         }
 
@@ -104,7 +102,6 @@ namespace Assist.July._2022.BE2.Application.Services
             {
                 _logger.LogError($"File {blobFilename} was not found.");
             }
-
             return null;
         }
         public async Task<BlobResponse> DeleteAsync(string blobFilename)
@@ -131,5 +128,7 @@ namespace Assist.July._2022.BE2.Application.Services
             return (s.Length%4==0)&&Regex.IsMatch(s, @"^[a-zA-Z0-9+/]*={0,3}$", RegexOptions.None);
         }
 
+            return new BlobResponse { Error = false, Status = $"File: {blobFilename} has been successfully deleted." };
+        }
     }
 }
