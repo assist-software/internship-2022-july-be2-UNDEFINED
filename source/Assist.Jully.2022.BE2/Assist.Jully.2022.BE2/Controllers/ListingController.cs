@@ -1,5 +1,4 @@
-﻿using Assist.July._2022.BE2.Application.Dtos.Blob;
-using Assist.July._2022.BE2.Application.Dtos.ListingDtos;
+﻿using Assist.July._2022.BE2.Application.Dtos.ListingDtos;
 using Assist.July._2022.BE2.Application.Interfaces;
 using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
@@ -12,62 +11,23 @@ namespace Assist.Jully._2022.BE2.Controllers
     {
         private IListingService listingService;
         private readonly ApplicationDbContext applicationDbContext;
-        private readonly IAzureStorage _storage;
 
-        public ListingController(IListingService listingService, ApplicationDbContext applicationDbContext, IAzureStorage storage)
+        public ListingController(IListingService listingService, ApplicationDbContext applicationDbContext)
         {
             this.listingService = listingService;
             this.applicationDbContext = applicationDbContext;
-            _storage = storage;
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateNewListing( IFormFile file)
+        public async Task<IActionResult> CreateNewListing(PostListingRequestDto request)
         {
             try
             {
-                //await listingService.AddAsync(request);
-                BlobResponse? response = await _storage.UploadAsync(file);
-
-
+                await listingService.AddAsync(request);
 
                 return Ok("Listing Added");
             }
             catch(Exception)
-            {
-                return BadRequest("An error has occured");
-            }
-        }
-        [HttpPost("create2")]
-        public async Task<IActionResult> CreateNewListing2(PostListingRequestDto request)
-        {
-            try
-            {
-                await listingService.AddAsync(request);
-                BlobResponse? response = await _storage.UploadAsync(request.Images);
-
-
-
-                return Ok("Listing Added");
-            }
-            catch (Exception)
-            {
-                return BadRequest("An error has occured");
-            }
-        }
-        [HttpPost("create3")]
-        public async Task<IActionResult> CreateNewListing3(PostListingRequestDto request, IFormFile file)
-        {
-            try
-            {
-                await listingService.AddAsync(request);
-                BlobResponse? response = await _storage.UploadAsync(request.Images);
-
-
-
-                return Ok("Listing Added");
-            }
-            catch (Exception)
             {
                 return BadRequest("An error has occured");
             }

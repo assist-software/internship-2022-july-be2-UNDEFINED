@@ -3,10 +3,8 @@ using Assist.July._2022.BE2.Application.Interfaces;
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Assist.July._2022.BE2.Application.Services
 {
@@ -39,47 +37,21 @@ namespace Assist.July._2022.BE2.Application.Services
             }
             return files;
         }
-        public async Task<BlobResponse> UploadAsync(IFormFile blob)
-        {
-            BlobResponse response = new();
-            BlobContainerClient container = new BlobContainerClient(_storageConnectionString, _storageContainerName);
-            try
-            {
-               
-                BlobClient client = container.GetBlobClient(blob.FileName);
-                await using (Stream? data = blob.OpenReadStream())
-                {
-                    await client.UploadAsync(data);
-                }
-                response.Status = $"File {blob.FileName} Uploaded Successfully";
-                response.Error = false;
-                response.Blob.Uri = client.Uri.AbsoluteUri;
-                response.Blob.Name = client.Name;
-            }
-            catch (RequestFailedException ex)
-               when (ex.ErrorCode == BlobErrorCode.BlobAlreadyExists)
-            {
-                _logger.LogError($"File with name {blob.FileName} already exists in container. Set another name to store the file in the container: '{_storageContainerName}.'");
-                response.Status = $"File with name {blob.FileName} already exists. Please use another name to store your file.";
-                response.Error = true;
-                return response;
-            }
-            catch (RequestFailedException ex)
-            {
-                _logger.LogError($"Unhandled Exception. ID: {ex.StackTrace} - Message: {ex.Message}");
-                response.Status = $"Unexpected error: {ex.StackTrace}. Check log with StackTrace ID.";
-                response.Error = true;
-                return response;
-            }
-            return response;
-        }
-
-        public async Task UploadAsync64(string file)
+        public async Task<string> UploadAsync64(string file, string name)
         {
             BlobResponse response = new BlobResponse();
             BlobContainerClient container = new BlobContainerClient(_storageConnectionString, _storageContainerName);
-
-
+            byte[] data = Convert.FromBase64String(file);
+            name += ".PNG";
+            BlobClient client = container.GetBlobClient(name);
+            client.Delete();
+            MemoryStream ms = new MemoryStream(data);
+            var blobHttpHeader = new BlobHttpHeaders { ContentType = "image/jpeg" };
+            await client.UploadAsync(ms, new BlobUploadOptions
+            { HttpHeaders = blobHttpHeader });
+            string link = client.Uri.Authority;
+            link += client.Uri.LocalPath;
+            return link;
         }
 
         public async Task<BlobFile> DownloadAsync(string blobFilename)

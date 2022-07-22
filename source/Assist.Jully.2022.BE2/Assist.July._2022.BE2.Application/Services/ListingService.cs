@@ -1,11 +1,11 @@
-﻿using Assist.July._2022.BE2.Application.Dtos.Blob;
-using Assist.July._2022.BE2.Application.Dtos.ListingDtos;
+﻿using Assist.July._2022.BE2.Application.Dtos.ListingDtos;
+using Assist.July._2022.BE2.Application.Helper;
 using Assist.July._2022.BE2.Application.Interfaces;
 using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
 using Assist.July._2022.BE2.Infrastructure.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace Assist.July._2022.BE2.Application.Services
 {
@@ -13,13 +13,16 @@ namespace Assist.July._2022.BE2.Application.Services
     {
         private IListingRepository listingRepo;
         private IMapper mapper;
-        private IAzureStorage storage;
+        private IAzureStorage azure;
+        private AzureSettings azureSettings;
 
-        public ListingService(ApplicationDbContext applicationDbContext, IMapper mapper, IListingRepository listingRepo, IAzureStorage storage)
+        public ListingService(ApplicationDbContext applicationDbContext, IMapper mapper, IListingRepository listingRepo, IAzureStorage azure,
+            IOptions<AzureSettings> azureSettings)
         {
             this.mapper = mapper;
             this.listingRepo = listingRepo;
-            this.storage = storage;
+            this.azure = azure;
+            this.azureSettings = azureSettings.Value;
         }
         public async Task AddAsync(PostListingRequestDto request)
         {
@@ -51,12 +54,12 @@ namespace Assist.July._2022.BE2.Application.Services
 
             var listings = await listingRepo.GetSortedAsync(sortListingDto.sortOrder, sortListingDto.locationFilter, sortListingDto.priceRange, sortListingDto.searchString, sortListingDto.category, pageNumber, itemsPerPage);
 
-
             return listings;
         }
         public async Task<Listing> PutListingAsync(PostListingRequestDto request, Guid id)
         {
             var dbListing = await listingRepo.GetByIdAsync(id);
+            dbListing.Images = await azure.UploadAsync64(request.Images, dbListing.Id.ToString());
 
             if (dbListing == null)
             {
@@ -77,6 +80,8 @@ namespace Assist.July._2022.BE2.Application.Services
             {
                 return null;
             }
+
+            dbListing.Images += azureSettings.Key;
 
             return dbListing;
         }
