@@ -62,7 +62,7 @@ namespace Assist.July._2022.BE2.Application.Services
             await UserRepository.AddAsync(user);
             await UserRepository.PutAsync(user);
         }
-        public async Task<User> GetUser(Guid Id)
+        public async Task<User> getUser(Guid Id)
         {
             string SasKey = "?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2022-08-16T17:30:43Z&st=2022-07-20T09:30:43Z&sip=0.0.0.0-255.255.255.255&spr=https&sig=RReu5GnC4EjJqvE63A00A3iK6gLCOJp9Mk%2F6eXHbeQM%3D";
             var user = await UserRepository.GetByIdAsync(Id);
@@ -71,7 +71,7 @@ namespace Assist.July._2022.BE2.Application.Services
             user.Photo += SasKey;
             return user;
         }
-        public async Task<User> GetUserEmail(string Email)
+        public async Task<User> getUserEmail(string Email)
         {
             var user = await UserRepository.GetByEmaiAsync(Email);
             if (user == null)
@@ -79,7 +79,7 @@ namespace Assist.July._2022.BE2.Application.Services
 
             return user;
         }
-        public async Task ResetPassword(string Email)
+        public async Task resetPassword(string Email)
         {
             var user =await UserRepository.GetByEmaiAsync(Email);
             if (user == null)
@@ -92,11 +92,9 @@ namespace Assist.July._2022.BE2.Application.Services
             MailToSend.Body = user.Password;
             await UserRepository.PutAsync(user);
             await MailService.SendEmailAsync(MailToSend);
-            
-            
         }
 
-        public async Task UpdateUser(UpdateRequest Update,Guid id)
+        public async Task updateUser(UpdateRequest Update,Guid id)
         {
             var user = await UserRepository.GetByIdAsync(id);
             
@@ -104,22 +102,19 @@ namespace Assist.July._2022.BE2.Application.Services
                 throw new AppException("User not found");
            
             Mapper.Map(Update, user);
-            if (user.Photo== String.Empty ||user.Photo == "string")
-            {
-                user.Photo = await Azure.UploadAsync64(Update.Photo, user.Id.ToString());
-            }
+            user.Photo = await Azure.UploadAsync64(Update.Photo, user.Id.ToString());
             if (!string.IsNullOrEmpty(Update.Password))
                 user.Password = BCrypt.Net.BCrypt.HashPassword(Update.Password);
             await UserRepository.PutAsync(user);
            
         }
        
-        public async Task<IEnumerable<User>>GetAll()
+        public async Task<IEnumerable<User>>getAll()
         {
             var user = await UserRepository.GetAllAsync();
             return user;
         }
-        public async Task DeleteUser(Guid Id)
+        public async Task deleteUser(Guid Id)
         {
             var user = await UserRepository.GetByIdAsync(Id);
             if (user == null)

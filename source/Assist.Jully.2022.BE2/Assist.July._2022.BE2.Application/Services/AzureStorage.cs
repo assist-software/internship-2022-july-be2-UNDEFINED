@@ -48,7 +48,9 @@ namespace Assist.July._2022.BE2.Application.Services
             BlobClient client = container.GetBlobClient(name);
             client.Delete();
             MemoryStream ms = new MemoryStream(data);
-            await client.UploadAsync(ms);
+            var blobHttpHeader = new BlobHttpHeaders { ContentType = "image/jpeg" };
+            await client.UploadAsync(ms, new BlobUploadOptions
+            { HttpHeaders = blobHttpHeader });
             string link=client.Uri.Authority;
             link += client.Uri.LocalPath;
             return link;

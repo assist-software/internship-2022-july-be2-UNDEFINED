@@ -6,6 +6,7 @@ using Assist.July._2022.BE2.Infrastructure.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Assist.July._2022.BE2.Application.Dtos.InfoDtos;
 
 namespace Assist.Jully._2022.BE2.Controllers
 {
@@ -16,12 +17,14 @@ namespace Assist.Jully._2022.BE2.Controllers
         private IUserService UserService;
         private IMapper Mapper;
         private readonly AppSettings AppSetting;
+        private InfoMessegeDto message;
         public UserController(IUserService userService, IMapper mapper,
             IOptions<AppSettings>appsettings)
         {
             UserService = userService;
             Mapper = mapper;
             AppSetting = appsettings.Value;
+            message = new InfoMessegeDto();
         }
 
         [HttpPost("Authenticate"),AllowAnonymus]
@@ -35,7 +38,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch(AppException ex)
             {
-                return new BadRequestObjectResult("{'message':'user not found'}");
+                return new BadRequestObjectResult(message.Error);
             }
         }
         
@@ -46,11 +49,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             {
                 await UserService.Register(email,password);
 
-                return new OkObjectResult("{'message':'ok'};");
+                return new OkObjectResult(message.Ok);
             }
             catch (AppException ex)
             {
-                return new BadRequestObjectResult("{'message':'user already exist'}");
+                return new BadRequestObjectResult(message.Take);
             }
         }
         
@@ -59,13 +62,13 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                await UserService.ResetPassword(email);
+                await UserService.resetPassword(email);
 
-                return new OkObjectResult("{ 'message':'ok' };");
+                return new OkObjectResult(message.Ok);
             }
             catch(AppException ex)
             {
-                return new BadRequestObjectResult("{'message':'mail not found'}");
+                return new BadRequestObjectResult(message.ErrorEmail);
             }
         }
         
@@ -74,13 +77,13 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                await UserService.UpdateUser(Update,id);
+                await UserService.updateUser(Update,id);
 
-                return new OkObjectResult("{ 'message':'ok' }");
+                return new OkObjectResult(message.Ok);
             }
             catch (AppException ex)
             {
-                return new NotFoundObjectResult("{'message':'user not found'}");
+                return new NotFoundObjectResult(message.Error);
             }
         }
       
@@ -89,13 +92,13 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                var user = await UserService.GetUser(id);
+                var user = await UserService.getUser(id);
 
                 return new OkObjectResult(user);
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("{'message':'User not found'}");
+                return new NotFoundObjectResult(message.Error);
             }
         }
         [HttpGet("search/{Email}")]
@@ -103,13 +106,13 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                var user = await UserService.GetUserEmail(Email);
+                var user = await UserService.getUserEmail(Email);
 
                 return new OkObjectResult(user);
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("{'message':'user not found'}");
+                return new NotFoundObjectResult(message.Error);
             }
         }
         
@@ -118,12 +121,12 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                var users = await UserService.GetAll();
+                var users = await UserService.getAll();
                 return new OkObjectResult(users);
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("{'message':'Empty'}");
+                return new NotFoundObjectResult(message.ErrorEmpty);
             }
         }
         
@@ -132,13 +135,13 @@ namespace Assist.Jully._2022.BE2.Controllers
         {
             try
             {
-                await UserService.DeleteUser(id);
+                await UserService.deleteUser(id);
 
-                return new OkObjectResult("{ 'message':'ok' }");
+                return new OkObjectResult(message.Ok);
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("{'message':'user not found'}");
+                return new NotFoundObjectResult(message.Error);
             }
         }
  
