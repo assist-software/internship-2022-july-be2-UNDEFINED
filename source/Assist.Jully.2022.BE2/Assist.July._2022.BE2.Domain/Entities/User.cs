@@ -1,4 +1,6 @@
-﻿namespace Assist.July._2022.BE2.Domain.Entities
+﻿using Assist.July._2022.BE2.Domain.Enums;
+
+namespace Assist.July._2022.BE2.Domain.Entities
 {
     public record User
     {
@@ -17,6 +19,7 @@
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public bool IsActive { get; set; }
+        
 
         public ICollection<Listing>? Listings { get; set; }
         public ICollection<Favorite>? Favorites { get; set; }

@@ -35,7 +35,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch(AppException ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return new BadRequestObjectResult("{'message':'user not found'}");
             }
         }
         
@@ -46,11 +46,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             {
                 await UserService.Register(email,password);
 
-                return new OkObjectResult("ok");
+                return new OkObjectResult("{'message':'ok'};");
             }
             catch (AppException ex)
             {
-                return new BadRequestObjectResult("An error has occured");
+                return new BadRequestObjectResult("{'message':'user already exist'}");
             }
         }
         
@@ -61,11 +61,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             {
                 await UserService.ResetPassword(email);
 
-                return new OkObjectResult("ok");
+                return new OkObjectResult("{ 'message':'ok' };");
             }
             catch(AppException ex)
             {
-                return new BadRequestObjectResult("An error has occured");
+                return new BadRequestObjectResult("{'message':'mail not found'}");
             }
         }
         
@@ -76,11 +76,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             {
                 await UserService.UpdateUser(Update,id);
 
-                return new OkObjectResult("ok");
+                return new OkObjectResult("{ 'message':'ok' }");
             }
             catch (AppException ex)
             {
-                return new NotFoundObjectResult("User not found");
+                return new NotFoundObjectResult("{'message':'user not found'}");
             }
         }
       
@@ -95,7 +95,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("User not found");
+                return new NotFoundObjectResult("{'message':'User not found'}");
             }
         }
         [HttpGet("search/{Email}")]
@@ -109,7 +109,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("User not found");
+                return new NotFoundObjectResult("{'message':'user not found'}");
             }
         }
         
@@ -123,7 +123,7 @@ namespace Assist.Jully._2022.BE2.Controllers
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("Database is empty");
+                return new NotFoundObjectResult("{'message':'Empty'}");
             }
         }
         
@@ -134,11 +134,11 @@ namespace Assist.Jully._2022.BE2.Controllers
             {
                 await UserService.DeleteUser(id);
 
-                return new OkObjectResult("ok");
+                return new OkObjectResult("{ 'message':'ok' }");
             }
             catch(AppException ex)
             {
-                return new NotFoundObjectResult("User not found");
+                return new NotFoundObjectResult("{'message':'user not found'}");
             }
         }
  

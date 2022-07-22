@@ -7,7 +7,7 @@ using AutoMapper;
 using Assist.July._2022.BE2.Application.Dtos.MailDtos;
 using Assist.July._2022.BE2.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
-using System.Net;
+using BCrypt.Net;
 
 namespace Assist.July._2022.BE2.Application.Services
 {
@@ -47,7 +47,7 @@ namespace Assist.July._2022.BE2.Application.Services
 
             var user = new User();
             user.Email = Email;
-            user.Password = Password;
+            user.Password = BCrypt.Net.BCrypt.HashPassword(Password);
             user.Address = string.Empty;
             user.FullName = string.Empty;
             user.IsActive = true;
@@ -84,7 +84,7 @@ namespace Assist.July._2022.BE2.Application.Services
             var user =await UserRepository.GetByEmaiAsync(Email);
             if (user == null)
                 throw new AppException("Wrong Mail");
-            user.Password = CreateNewPassword();
+            user.Password = BCrypt.Net.BCrypt.HashPassword(CreateNewPassword());
             user.UpdatedAt = DateTime.Now;
             MailRequest MailToSend=new MailRequest();
             MailToSend.ToEmail = Email;
@@ -104,7 +104,12 @@ namespace Assist.July._2022.BE2.Application.Services
                 throw new AppException("User not found");
            
             Mapper.Map(Update, user);
-            user.Photo = await Azure.UploadAsync64(Update.Photo, user.Id.ToString());
+            if (user.Photo== String.Empty ||user.Photo == "string")
+            {
+                user.Photo = await Azure.UploadAsync64(Update.Photo, user.Id.ToString());
+            }
+            if (!string.IsNullOrEmpty(Update.Password))
+                user.Password = BCrypt.Net.BCrypt.HashPassword(Update.Password);
             await UserRepository.PutAsync(user);
            
         }
