@@ -55,6 +55,9 @@ namespace Assist.July._2022.BE2.Domain.Configurations
                 .WithMany(entity => entity.Users);
 
             builder
+                .Property(entity => entity.Google);
+
+            builder
                 .Property(entity => entity.CreatedAt)
                 .IsRequired();
 
