@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 namespace Assist.July._2022.BE2.Application.Dtos.ListingDtos
 {
     public class PostListingRequestDto
@@ -9,7 +10,7 @@ namespace Assist.July._2022.BE2.Application.Dtos.ListingDtos
         public string Location { get; set; }
         public double Price { get; set; }
         public byte Status { get; set; }
-        public string? Images { get; set; }
+        public IFormFile? Images { get; set; }
         public string? Category { get; set; }
         public int ViewCounter { get; set; }
         public DateTime CreatedAt { get; set; }

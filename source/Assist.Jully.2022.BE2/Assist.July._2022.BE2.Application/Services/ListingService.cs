@@ -1,9 +1,11 @@
-﻿using Assist.July._2022.BE2.Application.Dtos.ListingDtos;
+﻿using Assist.July._2022.BE2.Application.Dtos.Blob;
+using Assist.July._2022.BE2.Application.Dtos.ListingDtos;
 using Assist.July._2022.BE2.Application.Interfaces;
 using Assist.July._2022.BE2.Domain.Entities;
 using Assist.July._2022.BE2.Infrastructure.Contexts;
 using Assist.July._2022.BE2.Infrastructure.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 
 namespace Assist.July._2022.BE2.Application.Services
 {
@@ -11,15 +13,23 @@ namespace Assist.July._2022.BE2.Application.Services
     {
         private IListingRepository listingRepo;
         private IMapper mapper;
+        private IAzureStorage storage;
 
-        public ListingService(ApplicationDbContext applicationDbContext, IMapper mapper, IListingRepository listingRepo)
+        public ListingService(ApplicationDbContext applicationDbContext, IMapper mapper, IListingRepository listingRepo, IAzureStorage storage)
         {
             this.mapper = mapper;
             this.listingRepo = listingRepo;
+            this.storage = storage;
         }
         public async Task AddAsync(PostListingRequestDto request)
         {
             Listing newListing = mapper.Map<Listing>(request);
+
+            //if (response.Error == true)
+            //{
+            //    throw new KeyNotFoundException("Eroare la blob");
+            //}
+
             await listingRepo.AddAsync(newListing);
         }
         public async Task<IEnumerable<Listing>> GetAllListingsAsync()

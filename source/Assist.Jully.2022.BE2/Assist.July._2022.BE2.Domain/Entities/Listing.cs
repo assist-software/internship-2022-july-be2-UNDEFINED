@@ -1,4 +1,6 @@
-﻿namespace Assist.July._2022.BE2.Domain.Entities
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Assist.July._2022.BE2.Domain.Entities
 {
     public record Listing
     {
@@ -9,6 +11,7 @@
         public string? Location { get; set; }
         public double? Price { get; set; }
         public byte Status { get; set; }
+        public IFormFile ImagesTest { get; set; }
         public string? Images { get; set; }
         public string? Category { get; set; }
         public int ViewCounter { get; set; }
